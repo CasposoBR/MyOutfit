@@ -50,6 +50,12 @@ android {
 }
 
 dependencies {
+//minhas dependencias:
+    implementation (libs.hilt.android)
+    implementation (libs.hilt.android.compiler)
+
+
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
