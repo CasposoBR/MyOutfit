@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.gms.google-services") version "4.4.2"
+    id("kotlin-kapt") // Para Hilt funcionar corretamente
 }
 
 android {
@@ -50,12 +52,16 @@ android {
 }
 
 dependencies {
-//minhas dependencias:
-    implementation (libs.hilt.android)
-    implementation (libs.hilt.android.compiler)
+    // 🔹 Dependências do Firebase
+    implementation(libs.firebase.auth.ktx.v2212)
 
+    // 🔹 Dependências do Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler) // 🔹 Usa kapt ao invés de implementation
 
-
+    // 🔹 Dependências do Compose e Material3
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx.v262)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -65,6 +71,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    // 🔹 Testes
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
