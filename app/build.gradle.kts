@@ -54,6 +54,10 @@ android {
 dependencies {
     // 🔹 Dependências do Firebase
     implementation(libs.firebase.auth.ktx.v2212)
+    implementation (libs.firebase.auth)
+    //🔹 Dependências do Google
+    implementation (libs.play.services.auth)
+    implementation (libs.play.services.auth.v2010)
 
     // 🔹 Dependências do Hilt
     implementation(libs.hilt.android)

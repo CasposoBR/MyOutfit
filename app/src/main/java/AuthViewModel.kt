@@ -36,7 +36,20 @@ fun loginWithGoogle(idToken: String, onResult: (Boolean,String?) -> Unit){
             }
         }
 }
+        fun signInWithGoogle(token: String, callback: (success: Boolean, error: String?) -> Unit) {
+            val credential = GoogleAuthProvider.getCredential(token, null)
 
+            FirebaseAuth.getInstance().signInWithCredential(credential)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Se o login foi bem-sucedido
+                        callback(true, null)
+                    } else {
+                        // Se ocorreu algum erro
+                        callback(false, task.exception?.localizedMessage)
+                    }
+                }
+        }
 
     }
 
