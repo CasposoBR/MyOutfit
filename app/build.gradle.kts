@@ -53,35 +53,28 @@ android {
 
 dependencies {
     // 🔹 Dependências do Firebase
-    implementation(libs.firebase.auth.ktx.v2212)
-    implementation (libs.firebase.auth)
-    //🔹 Dependências do Google
-    implementation (libs.play.services.auth)
-    implementation (libs.play.services.auth.v2010)
+    implementation (libs.firebase.auth.ktx.v2110)
+    implementation (libs.firebase.auth.v2110)
+
+    // 🔹 Dependências do Google
+    implementation (libs.play.services.auth.v2070)
 
     // 🔹 Dependências do Hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler) // 🔹 Usa kapt ao invés de implementation
+    implementation (libs.hilt.android.v244)
+    kapt (libs.hilt.android.compiler.v244)
 
     // 🔹 Dependências do Compose e Material3
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.lifecycle.runtime.ktx.v262)
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+    implementation(libs.androidx.activity.compose.v182)
+    implementation (libs.androidx.lifecycle.viewmodel.compose.v262)
+    implementation (libs.androidx.lifecycle.runtime.ktx)
+    implementation (libs.ui)
+    implementation (libs.material3)
+    implementation (libs.androidx.tooling.preview)
 
     // 🔹 Testes
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    testImplementation (libs.junit)
+    androidTestImplementation (libs.androidx.junit.v115)
+    androidTestImplementation (libs.androidx.espresso.core.v351)
+    androidTestImplementation (libs.ui.test.junit4)
+    debugImplementation (libs.ui.tooling)
 }
