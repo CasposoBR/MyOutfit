@@ -67,6 +67,7 @@ dependencies {
 
     // 🔹 Hilt
     implementation(libs.hilt.android.v244)
+    implementation(libs.androidx.appcompat)
     kapt(libs.hilt.android.compiler.v244)
 
     // 🔹 Jetpack Compose + Material3
