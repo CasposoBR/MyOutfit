@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.gms.google-services") version "4.4.2"
     id("kotlin-kapt") // Para Hilt funcionar corretamente
+    id("com.google.gms.google-services") version "4.4.2" apply false
 }
 
 android {
@@ -55,6 +55,8 @@ dependencies {
     // 🔹 Dependências do Firebase
     implementation (libs.firebase.auth.ktx.v2110)
     implementation (libs.firebase.auth.v2110)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 
     // 🔹 Dependências do Google
     implementation (libs.play.services.auth.v2070)
@@ -64,6 +66,8 @@ dependencies {
     kapt (libs.hilt.android.compiler.v244)
 
     // 🔹 Dependências do Compose e Material3
+    implementation(libs.ui.tooling.preview)
+    implementation(platform(libs.androidx.compose.bom.v20240202))
     implementation(libs.androidx.activity.compose.v182)
     implementation (libs.androidx.lifecycle.viewmodel.compose.v262)
     implementation (libs.androidx.lifecycle.runtime.ktx)

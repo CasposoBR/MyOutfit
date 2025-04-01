@@ -2,12 +2,14 @@
 activityComposeVersion = "1.8.2"
 agp = "8.6.0"
 androidxJunit = "1.1.5"
+composeBomVersion = "2024.02.02"
 credentials = "1.5.0"
 espressoCoreVersion = "3.5.1"
 firebaseAuth = "23.2.0"
 firebaseAuthKtx = "23.2.0"
 firebaseAuthKtxVersion = "22.1.2"
 firebaseAuthVersion = "21.1.0"
+firebaseBom = "33.12.0"
 googleFirebaseAuthKtx = "21.1.0"
 googlePlayServicesAuth = "20.1.0"
 hiltAndroid = "2.44"
@@ -31,9 +33,11 @@ toolingPreview = "1.5.0"
 ui = "1.7.8"
 uiTestJunit4 = "1.7.8"
 uiTooling = "1.7.8"
+uiToolingPreview = "1.7.8"
 
 [libraries]
 androidx-activity-compose-v182 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
+androidx-compose-bom-v20240202 = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 androidx-espresso-core-v351 = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
@@ -42,11 +46,13 @@ androidx-lifecycle-runtime-ktx-v262 = { module = "androidx.lifecycle:lifecycle-r
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 androidx-lifecycle-viewmodel-compose-v262 = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelComposeVersion" }
 androidx-tooling-preview = { module = "androidx.compose.ui:tooling-preview", version.ref = "toolingPreview" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
 firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
 firebase-auth-ktx-v2110 = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "googleFirebaseAuthKtx" }
 firebase-auth-ktx-v2212 = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebaseAuthKtxVersion" }
 firebase-auth-v2110 = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuthVersion" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 google-firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidCompiler" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
@@ -72,6 +78,7 @@ play-services-auth-v2070 = { module = "com.google.android.gms:play-services-auth
 ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "uiTestJunit4" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "uiTooling" }
+ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

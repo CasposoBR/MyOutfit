@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "253613913863",
+    "project_id": "myoutfit-b27fb",
+    "storage_bucket": "myoutfit-b27fb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:253613913863:android:31d789fc283b7010ddb7a2",
+        "android_client_info": {
+          "package_name": "com.example.myoutfit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqXU1LnkOKcvASgRNuWKdcbIMI7QDCW10"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
