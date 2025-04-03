@@ -1,64 +1,111 @@
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 
-
-//lógica do cadastro
-class SignUpActivity: AppCompatActivity() {
-    private lateinit var binding: ActivitySignUpBinding
+class SignUpActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
 
-    override fun onCreate(savedInstanceState: Bundle?){
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-    binding = ActivitySignUpBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        auth = FirebaseAuth.getInstance()
+        auth = FirebaseAuth.getInstance() // Inicializa FirebaseAuth
 
-        binding.btnSignUp.setOnClickListener {
-            val email = binding.editEmail.text.toString()
-            val password = binding.editPassword.text.toString()
-            val cpf = binding.editCpf.text.toString()
-            val birthDate = binding.editBirthDate.text.toString()
-
-            if (email.isNotEmpty() && password.isNotEmpty() && cpf.isNotEmpty() && birthDate.isNotEmpty()) {
-                registerWithEmail(email,password,cpf,birthDate)
-
-            }else {
-                Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
-
-            }
-        }
-
-        binding.btnSignUpGoogle.setOnClickListener {
-            signUpWithGoogle()
-
+        setContent {
+            SignUpScreen(auth)
         }
     }
+}
 
-    private fun  registerWithEmail(email: String, password: String, cpf: String, birthDate: String){
-        auth.createUserWithEmailAndPassword(email,password)
-            .addOnCompleteListener(this) {task ->
-                if(task.isSuccessful){
-                    //salvar dados adicionais, como Cpf e data de nascimento ao firebase firestore
-                    val user = auth.currentUser
-                    //navegar para a proxima tela
+@Composable
+fun SignUpScreen(auth: FirebaseAuth) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var cpf by remember { mutableStateOf("") }
+    var birthDate by remember { mutableStateOf("") }
 
-                }else{
-                    Toast.makeText(this, "Erro ao cadastrar, tente novamente",Toast.LENGTH_SHORT).show()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth()
+        )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Senha") },
+            visualTransformation = PasswordVisualTransformation(),
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = cpf,
+            onValueChange = { cpf = it },
+            label = { Text("CPF") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = birthDate,
+            onValueChange = { birthDate = it },
+            label = { Text("Data de Nascimento") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = { registerWithEmail(auth, email, password, cpf, birthDate) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Cadastrar")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(
+            onClick = { signUpWithGoogle() },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Cadastrar com Google")
+        }
+    }
+}
+
+fun registerWithEmail(auth: FirebaseAuth, email: String, password: String, cpf: String, birthDate: String) {
+    if (email.isNotEmpty() && password.isNotEmpty() && cpf.isNotEmpty() && birthDate.isNotEmpty()) {
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    println("Cadastro bem-sucedido!")
+                } else {
+                    println("Erro ao cadastrar, tente novamente.")
                 }
             }
+    } else {
+        println("Preencha todos os campos.")
     }
+}
 
-    private fun signUpWithGoogle(){
-        //implementar a lógica do cadastro com o google
-
-    }
-
-
-
-
-
+fun signUpWithGoogle() {
+    // Implementar lógica de cadastro com Google
 }
