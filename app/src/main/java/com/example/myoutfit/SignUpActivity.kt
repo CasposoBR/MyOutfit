@@ -1,5 +1,6 @@
+package com.example.myoutfit
+
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -10,24 +11,26 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 
-class LoginActivity : ComponentActivity() {
+class SignUpActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        auth = FirebaseAuth.getInstance() // Inicializa o FirebaseAuth
+        auth = FirebaseAuth.getInstance() // Inicializa FirebaseAuth
 
         setContent {
-            LoginScreen(auth) // Chama a tela de login
+            SignUpScreen(auth)
         }
     }
 }
 
 @Composable
-fun LoginScreen(auth: FirebaseAuth) {
+fun SignUpScreen(auth: FirebaseAuth) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var cpf by remember { mutableStateOf("") }
+    var birthDate by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -51,34 +54,52 @@ fun LoginScreen(auth: FirebaseAuth) {
             modifier = Modifier.fillMaxWidth()
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = cpf,
+            onValueChange = { cpf = it },
+            label = { Text("CPF") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = birthDate,
+            onValueChange = { birthDate = it },
+            label = { Text("Data de Nascimento") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { loginWithEmail(auth, email, password) },
+            onClick = { registerWithEmail(auth, email, password, cpf, birthDate) },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Login")
+            Text("Cadastrar")
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
-            onClick = { signInWithGoogle() },
+            onClick = { signUpWithGoogle() },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Login com Google")
+            Text("Cadastrar com Google")
         }
     }
 }
 
-fun loginWithEmail(auth: FirebaseAuth, email: String, password: String) {
-    if (email.isNotEmpty() && password.isNotEmpty()) {
-        auth.signInWithEmailAndPassword(email, password)
+fun registerWithEmail(auth: FirebaseAuth, email: String, password: String, cpf: String, birthDate: String) {
+    if (email.isNotEmpty() && password.isNotEmpty() && cpf.isNotEmpty() && birthDate.isNotEmpty()) {
+        auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    println("Login bem-sucedido!")
+                    println("Cadastro bem-sucedido!")
                 } else {
-                    println("Erro ao logar. Tente novamente.")
+                    println("Erro ao cadastrar, tente novamente.")
                 }
             }
     } else {
@@ -86,6 +107,6 @@ fun loginWithEmail(auth: FirebaseAuth, email: String, password: String) {
     }
 }
 
-fun signInWithGoogle() {
-    // Implementar lógica do login com Google
+fun signUpWithGoogle() {
+    // Implementar lógica de cadastro com Google
 }

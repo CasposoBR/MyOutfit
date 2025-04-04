@@ -1,3 +1,5 @@
+package com.example.myoutfit
+
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts

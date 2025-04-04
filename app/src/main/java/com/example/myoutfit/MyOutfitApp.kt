@@ -1,4 +1,4 @@
-//classe principal que inicia antes de tudo no app
+package com.example.myoutfit//classe principal que inicia antes de tudo no app
 import android.app.Application
 import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
