@@ -12,7 +12,20 @@
           "package_name": "com.example.myoutfit"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "253613913863-n2q28ragm8uc0o1o8kolupe0os5qg48r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myoutfit",
+            "certificate_hash": "516f2893b588b35cd041df6aa2c6c70341e62ebf"
+          }
+        },
+        {
+          "client_id": "253613913863-i76s4mrirgclb8or61cre7q7mh45ksu5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAqXU1LnkOKcvASgRNuWKdcbIMI7QDCW10"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "253613913863-i76s4mrirgclb8or61cre7q7mh45ksu5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

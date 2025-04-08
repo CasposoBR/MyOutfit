@@ -1,5 +1,6 @@
 package com.example.myoutfit
 
+import android.util.Patterns
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -8,17 +9,19 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @Composable
-fun LoginScreen(auth: FirebaseAuth, navController: NavController) {
+fun RegisterScreen(auth: FirebaseAuth, navController: NavController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var cpf by remember { mutableStateOf("") }
+    var dataNascimento by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -42,46 +45,51 @@ fun LoginScreen(auth: FirebaseAuth, navController: NavController) {
             modifier = Modifier.fillMaxWidth()
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = cpf,
+            onValueChange = { cpf = it },
+            label = { Text("CPF") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = dataNascimento,
+            onValueChange = { dataNascimento = it },
+            label = { Text("Data de Nascimento (DD/MM/AAAA)") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = {
-                CoroutineScope(Dispatchers.Main).launch {
+                scope.launch(Dispatchers.IO) {
+                    if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                        errorMessage = "Email inválido"
+                        return@launch
+                    }
+
+                    if (password.length < 6) {
+                        errorMessage = "Senha deve ter pelo menos 6 caracteres"
+                        return@launch
+                    }
+
                     try {
-                        auth.signInWithEmailAndPassword(email, password).await()
+                        auth.createUserWithEmailAndPassword(email, password).await()
+                        // Sucesso no cadastro! Navegar para home
                         navController.navigate("home")
-                    } catch (e: FirebaseAuthInvalidCredentialsException) {
-                        errorMessage = "Credenciais inválidas"
                     } catch (e: Exception) {
-                        errorMessage = "Erro: ${e.message}"
+                        errorMessage = "Erro ao cadastrar: ${e.message}"
                     }
                 }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Login")
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // ✅ Botão de Cadastro
-        Button(
-            onClick = { navController.navigate("register") },
-            modifier = Modifier.fillMaxWidth()
-        ) {
             Text("Cadastrar")
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // ✅ Botão de Login com Google
-        Button(
-            onClick = {
-                errorMessage = "Login com Google ainda não implementado"
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Login com Google")
         }
 
         errorMessage?.let {

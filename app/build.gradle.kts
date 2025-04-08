@@ -16,7 +16,7 @@ android {
     defaultConfig {
         applicationId = "com.example.myoutfit"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 33 // Atualizado para 33, já que você está utilizando recursos do Android 13
         versionCode = 1
         versionName = "1.0"
 
@@ -71,7 +71,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.analytics)
-
+    implementation(libs.firebase.perf)
     // Google Auth
     implementation(libs.play.services.auth)
 
