@@ -1,12 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.devtools.ksp")
-    id("com.google.gms.google-services") version "4.4.2"
-    id("dagger.hilt.android.plugin")
-    id("org.jetbrains.kotlin.plugin.compose") version "2.0.0"
-
+    alias(libs.plugins.kotlin.kapt)
+    id("com.google.gms.google-services")
+    id("com.google.dagger.hilt.android") // ✅ CORRETO
 }
+
 
 android {
     namespace = "com.example.myoutfit"
@@ -18,7 +17,6 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -42,14 +40,8 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
-
-
-        composeCompiler {
-            reportsDestination = layout.buildDirectory.dir("compose_compiler")
-            stabilityConfigurationFile =
-                rootProject.layout.projectDirectory.file("stability_config.conf")
-        }
     }
+
     buildFeatures {
         compose = true
         viewBinding = true
@@ -62,33 +54,34 @@ android {
     }
 }
 
-dependencies {
-    // 🔹 Firebase (BoM já gerencia versões)
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth.ktx)
-    implementation(libs.firebase.analytics)
-    implementation (libs.kotlin.stdlib)
-    // 🔹 Google Services
-    implementation(libs.play.services.auth)
+    dependencies {
+        // Firebase
+        implementation(platform(libs.firebase.bom))
+        implementation(libs.firebase.auth.ktx)
+        implementation(libs.firebase.analytics)
 
-    // 🔹 Hilt
-    implementation(libs.hilt.android.v2561)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.hilt.navigation.compose)
-    ksp(libs.hilt.compiler)
-    // 🔹 Jetpack Compose + Material3
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.ui)
-    implementation(libs.material3)
-    implementation(libs.ui.tooling.preview)
+        // Google Auth
+        implementation(libs.play.services.auth)
 
-    // 🔹 Testes
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.ui.test.junit4)
-    debugImplementation(libs.ui.tooling)
-}
+        // Hilt
+        implementation(libs.hilt.android)
+        kapt(libs.hilt.compiler)
+        implementation(libs.hilt.navigation.compose)
+        implementation(libs.kotlin.stdlib)
+
+        // Compose + Material3
+        implementation(platform(libs.compose.bom))
+        implementation(libs.activity.compose)
+        implementation(libs.lifecycle.viewmodel.compose)
+        implementation(libs.lifecycle.runtime.ktx)
+        implementation(libs.compose.ui)
+        implementation(libs.material3)
+        implementation(libs.compose.ui.tooling.preview)
+
+        // Testes
+        testImplementation(libs.junit)
+        androidTestImplementation(libs.androidx.junit)
+        androidTestImplementation(libs.espresso.core)
+        androidTestImplementation(libs.compose.ui.test.junit4)
+        debugImplementation(libs.compose.ui.tooling)
+    }

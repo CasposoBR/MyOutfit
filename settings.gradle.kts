@@ -1,32 +1,24 @@
 pluginManagement {
     repositories {
-        google {
-            mavenCentral()
-            gradlePluginPortal()
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
+        google()
         mavenCentral()
         gradlePluginPortal()
     }
 }
-dependencyResolutionManagement {
-    versionCatalogs {
-        create("libs") {
-            from(files("gradle/libs.versions.toml"))
-        }
-    }
 
+dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
     }
+
+    versionCatalogs {
+        create("myLibs") {
+            from(files("gradle/libs.versions.toml")) // ✅ SÓ UMA CHAMADA AO from
+        }
+    }
 }
 
 rootProject.name = "MyOutfit"
 include(":app")
- 
