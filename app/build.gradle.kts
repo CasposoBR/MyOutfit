@@ -82,6 +82,7 @@ dependencies {
     implementation(libs.kotlin.stdlib)
 
     // Compose + Material3
+    implementation(libs.navigation.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.activity.compose)
     implementation(libs.lifecycle.viewmodel.compose)
