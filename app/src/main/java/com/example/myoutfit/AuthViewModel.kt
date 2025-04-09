@@ -23,7 +23,7 @@ class AuthViewModel @Inject constructor(
 
     fun configureGoogleSignIn(context: Context) {
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("SEU_WEB_CLIENT_ID") // Substitua pelo seu Client ID do Firebase
+            .requestIdToken("253613913863-i76s4mrirgclb8or61cre7q7mh45ksu5.apps.googleusercontent.com") // ✅ Seu Client ID
             .requestEmail()
             .build()
 
@@ -52,5 +52,21 @@ class AuthViewModel @Inject constructor(
             Log.e("Auth", "Falha no login do Google", e)
             callback(false, e.localizedMessage)
         }
+    }
+
+    // ✅ Novo método para login com email/senha
+    fun signInWithEmailAndPassword(
+        email: String,
+        password: String,
+        callback: (Boolean, String?) -> Unit
+    ) {
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    callback(true, null)
+                } else {
+                    callback(false, task.exception?.localizedMessage)
+                }
+            }
     }
 }

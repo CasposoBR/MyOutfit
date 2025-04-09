@@ -1,8 +1,22 @@
 package com.example.myoutfit
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -15,7 +29,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @Composable
-fun LoginScreen(auth: FirebaseAuth, navController: NavController) {
+fun LoginScreen(
+    auth: FirebaseAuth,
+    authViewModel: AuthViewModel,
+    launcher: ActivityResultLauncher<Intent>,
+    navController: NavController
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -64,7 +83,6 @@ fun LoginScreen(auth: FirebaseAuth, navController: NavController) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // ✅ Botão de Cadastro
         Button(
             onClick = { navController.navigate("register") },
             modifier = Modifier.fillMaxWidth()
@@ -74,10 +92,9 @@ fun LoginScreen(auth: FirebaseAuth, navController: NavController) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // ✅ Botão de Login com Google
         Button(
             onClick = {
-                errorMessage = "Login com Google ainda não implementado"
+                launcher.launch(authViewModel.getGoogleSignInIntent())
             },
             modifier = Modifier.fillMaxWidth()
         ) {
