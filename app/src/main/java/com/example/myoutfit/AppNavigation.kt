@@ -26,6 +26,12 @@ fun AppNavigation(
                 navController = navController
             )
         }
+        composable("register") {
+            RegisterScreen(
+                auth = auth,
+                navController = navController
+            )
+        }
         composable("home") {
             HomeScreen()
         }
