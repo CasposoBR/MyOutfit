@@ -1,4 +1,6 @@
 [versions]
+coilCompose = "2.5.0"
+coilComposeVersion = "2.4.0"
 kotlin = "2.1.0"
 agp = "8.6.0"
 
@@ -33,8 +35,11 @@ toolingPreview = "1.5.0"
 
 kotlinStdlib = "2.1.10"
 foundationLayoutAndroid = "1.7.0"
+uiTestAndroid = "1.7.8"
 
 [libraries]
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+coil-compose-v240 = { module = "io.coil-kt:coil-compose", version.ref = "coilComposeVersion" }
 core_ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 activity_compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -71,6 +76,7 @@ espresso_core = { group = "androidx.test.espresso", name = "espresso-core", vers
 navigation_compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 kotlin_stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlinStdlib" }
 foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
+ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version.ref = "uiTestAndroid" }
 
 [plugins]
 kotlin_kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

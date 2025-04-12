@@ -33,7 +33,7 @@ fun AppNavigation(
             )
         }
         composable("home") {
-            HomeScreen()
+            MyOutfitHomeScreen()
         }
     }
 }
