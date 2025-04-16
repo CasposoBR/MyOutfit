@@ -60,7 +60,7 @@ fun MyOutfitHomeScreen() {
 data class Product(val imageUrl: String, val title: String, val link: String, val category: CategoryType)
 
 enum class CategoryType {
-    SUMMER, WINTER, TREND, WORKOUT
+    SUMMER, WINTER, TREND, WORKOUT, CASUAL, FORMAL, URBAN
 }
 
 enum class BottomNavItem(val label: String, val icon: ImageVector) {
@@ -139,6 +139,25 @@ fun HomeContent() {
             "br.shein.com/Men-Shorts-p-13972715.html",
             CategoryType.SUMMER
         ),
+        Product(
+            "https://img.ltwebstatic.com/images3_spmp/2025/03/17/98/1742169872c605f20beaacf7759ac2b836b3552f2e.webp",
+            "Calça Jeans Preta Bag Balão",
+            "https://br.shein.com/Bag-Balloon-Jeans-Wide-Straight-Cut-Carpenter-UNISEX-p-61215286.html",
+            CategoryType.CASUAL
+        ),
+        Product(
+            "https://img.ltwebstatic.com/images3_spmp/2024/05/11/0f/1715377920b0126e5f20bc09f5b644072328d33fa9.webp",
+            "Camisa Social Masculina Manga Longa",
+            "br.shein.com/Men-Shirts-p-35387911.html",
+            CategoryType.FORMAL
+        ),
+        Product(
+            "https://img.ltwebstatic.com/images3_spmp/2024/11/12/e6/1731413624c3341e72f036f0a25f8a12752a8de9f9.webp",
+            "Camisa Camiseta Oversized Gola Alta Streetwear",
+            "br.shein.com/Shirt-Oversized-T-Shirt-Turtleneck-Streetwear-Men-And-Women-100-Cotton-Urban-Style-For-Training-And-Everyday-Black-And-Off-Whte-Printed-INVISIBLE-p-47641871.html",
+            CategoryType.URBAN
+        ),
+
 
     )
 
@@ -147,6 +166,9 @@ fun HomeContent() {
         Pair("Para o Verão", CategoryType.SUMMER),
         Pair("Para o Inverno", CategoryType.WINTER),
         Pair("Para o seu Treino", CategoryType.WORKOUT),
+        Pair("Roupas Casuais", CategoryType.CASUAL),
+        Pair("Roupas Formais", CategoryType.FORMAL),
+        Pair("Seja ousado", CategoryType.URBAN),
     )
 
     val scrollState = rememberScrollState()
