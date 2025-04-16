@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun MyOutfitHomeScreen() {
@@ -268,45 +269,71 @@ data class Category(val name: String, val imageUrl: String)
 
 @Composable
 fun SearchContent() {
+    var searchQuery by remember { mutableStateOf("") }
+
     val categories = listOf(
-        Category("Jaquetas", "https://i.imgur.com/k8z5vAY.jpg"),
-        Category("Camisas Oversized", "https://i.imgur.com/VQb1M5f.jpg"),
-        Category("Calças", "https://i.imgur.com/n7NnE5V.jpg"),
-        Category("Tênis", "https://i.imgur.com/I5HR82T.jpg"),
-        Category("Acessórios", "https://i.imgur.com/NkTCuMu.jpg"),
-        Category("Peça Única", "https://i.imgur.com/WSNxJ2E.jpg")
+        Category("Jaquetas", "https://img.icons8.com/?size=100&id=1186&format=png&color=000000"),
+        Category("Camisetas", "https://img.icons8.com/?size=100&id=105819&format=png&color=000000"),
+        Category("Calças", "https://img.icons8.com/?size=100&id=1172&format=png&color=000000"),
+        Category("Tênis", "https://img.icons8.com/?size=100&id=69628&format=png&color=000000"),
+        Category("Acessórios", "https://img.icons8.com/?size=100&id=DMhtuPky5Yql&format=png&color=000000"),
+        Category("Camisas", "https://img.icons8.com/?size=100&id=1169&format=png&color=000000"),
+        Category("Shorts", "https://img.icons8.com/?size=100&id=1174&format=png&color=000000"),
+
     )
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(categories) { category ->
-            ElevatedCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(180.dp)
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceBetween
+    categories.filter {
+        it.name.contains(searchQuery, ignoreCase = true)
+    }
+
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp)) {
+
+        OutlinedTextField(
+            value = searchQuery,
+            onValueChange = { searchQuery = it },
+            label = { Text("Buscar roupas...") },
+            leadingIcon = {
+                Icon(Icons.Default.Search, contentDescription = "Ícone de busca")
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3), // Deixei 3 por linha pra encaixar melhor cards menores
+            contentPadding = PaddingValues(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(categories) { category ->
+                ElevatedCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(90.dp) // Reduzido pela metade
                 ) {
-                    AsyncImage(
-                        model = category.imageUrl,
-                        contentDescription = category.name,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(130.dp)
-                    )
-                    Text(
-                        text = category.name,
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.padding(8.dp)
-                    )
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        AsyncImage(
+                            model = category.imageUrl,
+                            contentDescription = category.name,
+                            modifier = Modifier
+                                .size(48.dp) // Ícone menor
+                        )
+                        Text(
+                            text = category.name,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(horizontal = 4.dp)
+                        )
+                    }
                 }
             }
         }
