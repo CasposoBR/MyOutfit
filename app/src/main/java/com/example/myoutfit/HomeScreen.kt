@@ -140,15 +140,15 @@ fun HomeContent() {
             CategoryType.SUMMER
         ),
 
-
-
-
     )
 
-    val summerProducts = products.filter { it.category == CategoryType.SUMMER }
-    val winterProducts = products.filter { it.category == CategoryType.WINTER }
-    val trendProducts = products.filter { it.category == CategoryType.TREND }
-    val workoutProducts = products.filter { it.category == CategoryType.WORKOUT }
+    val categoriesToShow = listOf(
+        Pair("Tendências", CategoryType.TREND),
+        Pair("Para o Verão", CategoryType.SUMMER),
+        Pair("Para o Inverno", CategoryType.WINTER),
+        Pair("Para o seu Treino", CategoryType.WORKOUT),
+    )
+
     val scrollState = rememberScrollState()
 
     Column(
@@ -157,76 +157,29 @@ fun HomeContent() {
             .verticalScroll(scrollState)
             .padding(16.dp)
     ) {
-        // Seção para o Verão
-        Text("Tendências", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-        Spacer(Modifier.height(8.dp))
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
-        ) {
-            items(trendProducts) { product ->
-                TrendCard(
-                    imageUrl = product.imageUrl,
-                    title = product.title,
-                    link = product.link
-                )
+        categoriesToShow.forEach { (title, categoryType) ->
+            val filteredProducts = products.filter { it.category == categoryType }
+
+            if (filteredProducts.isNotEmpty()) {
+                Text(title, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                Spacer(Modifier.height(8.dp))
+
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp)
+                ) {
+                    items(filteredProducts) { product ->
+                        TrendCard(
+                            imageUrl = product.imageUrl,
+                            title = product.title,
+                            link = product.link
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(24.dp))
             }
         }
-
-        Spacer(Modifier.height(24.dp))
-
-        // Seção para o Inverno
-        Text("Para o Verão", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-        Spacer(Modifier.height(8.dp))
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
-        ) {
-            items(summerProducts) { product ->
-                TrendCard(
-                    imageUrl = product.imageUrl,
-                    title = product.title,
-                    link = product.link
-                )
-            }
-        }
-
-        Spacer(Modifier.height(24.dp))
-
-        // Seção de Tendências
-        Text("Para o Inverno", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-        Spacer(Modifier.height(8.dp))
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
-        ) {
-            items(winterProducts) { product ->
-                TrendCard(
-                    imageUrl = product.imageUrl,
-                    title = product.title,
-                    link = product.link
-                )
-            }
-        }
-        Spacer(Modifier.height(24.dp))
-
-        // Seção de Tendências
-        Text("Para o seu Treino", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-        Spacer(Modifier.height(8.dp))
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
-        ) {
-            items(workoutProducts) { product ->
-                TrendCard(
-                    imageUrl = product.imageUrl,
-                    title = product.title,
-                    link = product.link
-                )
-            }
-        }
-
-
     }
 }
 
