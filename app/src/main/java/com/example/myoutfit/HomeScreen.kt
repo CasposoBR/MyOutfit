@@ -78,8 +78,8 @@ enum class BottomNavItem(val label: String, val icon: ImageVector) {
 
 @Composable
 fun HomeContent(navController: NavHostController) {
-    val products = getProducts()
-    val categories = getCategories()
+    val products = getProducts() // Obtendo a lista de produtos
+    val categories = TagTypeClothes.entries.toTypedArray() // Obtendo todas as categorias de roupas (do enum TagTypeClothes)
 
     val scrollState = rememberScrollState()
 
@@ -89,14 +89,52 @@ fun HomeContent(navController: NavHostController) {
             .verticalScroll(scrollState)
             .padding(16.dp)
     ) {
+        // Seção de "Para o seu verão", "Para o seu inverno", "Tendências"
+        // Exibindo essas vitrine de maneira destacada
+
+        SectionTitle("Tendências")
+        val trendProducts = products.filter { product -> product.tags.contains(StyleTag.TREND) }
+        CategorySection(title = "Tendências", products = trendProducts, navController = navController)
+
+
+        SectionTitle("Para o seu verão")
+        val summerProducts = products.filter { product -> product.tags.contains(StyleTag.SUMMER) }
+        CategorySection(title = "Para o seu verão", products = summerProducts, navController = navController)
+
+        SectionTitle("Para o seu inverno")
+        val winterProducts = products.filter { product -> product.tags.contains(StyleTag.WINTER) }
+        CategorySection(title = "Para o seu inverno", products = winterProducts, navController = navController)
+
+        SectionTitle("Para o seu treino")
+        val workoutProducts = products.filter { product -> product.tags.contains(StyleTag.WORKOUT) }
+        CategorySection(title = "Para o seu treino", products = workoutProducts, navController = navController)
+
+        SectionTitle("Se destaque")
+        val formalProducts = products.filter { product -> product.tags.contains(StyleTag.FORMAL) }
+        CategorySection(title = "Para o seu treino", products = formalProducts, navController = navController)
+
+        // Exibindo as categorias baseadas no TagTypeClothes
         categories.forEach { category ->
-            val filteredProducts = products.filter { it.category == category }
+            val filteredProducts = products.filter { product ->
+                product.tags.any { tag -> tag.name == category.name }
+            }
 
             if (filteredProducts.isNotEmpty()) {
                 CategorySection(title = category.name, products = filteredProducts, navController = navController)
             }
         }
     }
+}
+
+
+
+@Composable
+fun SectionTitle(title: String) {
+    Text(
+        text = title,
+        style = MaterialTheme.typography.titleLarge,
+        modifier = Modifier.padding(vertical = 8.dp)
+    )
 }
 
 @Composable
@@ -260,7 +298,7 @@ fun getProducts(): List<ClothingItem> {
             imageUrl = "https://img.ltwebstatic.com/images3_pi/2024/08/28/b7/1724811269f1b9f1b91b4f0b2dc34b7f2aca60c8a5.webp",
             name = "Jaqueta Preta PU",
             purchaseLink = "https://br.shein.com/SWAVVY-Men-s-Fashionable-Daily-Casual-PU-Leather-Fitted-Long-Sleeve-Men-Jacket-Urban-Black-Jacket-For-Friends-Husband-Boyfriend-Gifts-p-41641968.html?mallCode=1&imgRatio=3-4",
-            category = CategoryType.WINTER,
+            category = TagTypeClothes.JACKETS,
             tags = listOf(StyleTag.CASUAL, StyleTag.WINTER, StyleTag.URBAN),
             price = "R$ 199,99"
         ),
@@ -268,7 +306,7 @@ fun getProducts(): List<ClothingItem> {
             imageUrl = "https://img.ltwebstatic.com/images3_spmp/2024/10/03/d3/172796272339daa9f54e33fe4bff473d187a24f118_thumbnail_336x.webp",
             name = "Camiseta Oversized",
             purchaseLink = "https://br.shein.com/Men-T-Shirts-p-25143085.html",
-            category = CategoryType.TREND,
+            category = TagTypeClothes.T_SHIRTS,
             tags = listOf(StyleTag.TREND, StyleTag.CASUAL),
             price = "R$ 79,90"
         ),
@@ -276,7 +314,7 @@ fun getProducts(): List<ClothingItem> {
             imageUrl = "https://img.ltwebstatic.com/images3_spmp/2023/06/12/16865104766b5b3b261d29d57196290c691452416f.webp",
             name = "Jaqueta Jeans",
             purchaseLink = "https://br.shein.com/Men-Denim-Jackets-p-14722960.html",
-            category = CategoryType.WINTER,
+            category = TagTypeClothes.JACKETS,
             tags = listOf(StyleTag.WINTER, StyleTag.CASUAL),
             price = "R$ 159,90"
         ),
@@ -284,7 +322,7 @@ fun getProducts(): List<ClothingItem> {
             imageUrl = "https://img.ltwebstatic.com/images3_pi/2024/03/06/59/17097300463527cb3179a7e75552444fd907ba6b23.webp",
             name = "Calça Alfaiataria",
             purchaseLink = "https://br.shein.com/Manfinity-Homme-Men-s-Casual-Solid-Color-Slant-Pocket-Drawstring-Pants-Straight-Leg-Long-Slacks-Plain-Going-Out-p-3115655.html",
-            category = CategoryType.TREND,
+            category = TagTypeClothes.PANTS,
             tags = listOf(StyleTag.TREND, StyleTag.FORMAL),
             price = "R$ 159,90"
         ),
@@ -292,7 +330,7 @@ fun getProducts(): List<ClothingItem> {
             imageUrl = "https://img.ltwebstatic.com/images3_spmp/2023/09/02/9a/1693662275a6500efb50040557607c45a67aa3b08c.webp",
             name = "Regata Canelada",
             purchaseLink = "https://br.shein.com/Men-Tank-Tops-p-22602261.html",
-            category = CategoryType.SUMMER,
+            category = TagTypeClothes.T_SHIRTS,
             tags = listOf(StyleTag.SUMMER, StyleTag.CASUAL),
             price = "R$ 159,90"
         ),
@@ -300,7 +338,7 @@ fun getProducts(): List<ClothingItem> {
             imageUrl = "https://img.ltwebstatic.com/images3_spmp/2025/02/19/4c/17399750382ff6a6719daecabbd80697b67f8fc201_square.webp",
             name = "Camisa Dry Fit",
             purchaseLink = "https://br.shein.com/Men-s-Short-Sleeve-Dry-Fit-Gym-Fitness-T-Shirt-Lisa-Plus-Size-Zoo-p-48405365.html",
-            category = CategoryType.WORKOUT,
+            category = TagTypeClothes.T_SHIRTS,
             tags = listOf(StyleTag.WORKOUT, StyleTag.CASUAL),
             price = "R$ 159,90"
         ),
@@ -308,7 +346,7 @@ fun getProducts(): List<ClothingItem> {
             imageUrl = "https://img.ltwebstatic.com/images3_spmp/2024/08/17/97/1723836643d25ffdb991394f79b4bce2ac1d8f3419_thumbnail_336x.webp",
             name = "Camisa Oversized Academia Fit",
             purchaseLink = "https://br.shein.com/Oversized-Shirt-Gym-Fashion-Fit-Bodybuilding-p-40991466.html",
-            category = CategoryType.WORKOUT,
+            category = TagTypeClothes.T_SHIRTS,
             tags = listOf(StyleTag.WORKOUT, StyleTag.TREND),
             price = "R$ 159,90"
         ),
@@ -316,7 +354,7 @@ fun getProducts(): List<ClothingItem> {
             imageUrl = "https://img.ltwebstatic.com/gspCenter/goodsImage/2023/1/31/4832058447_1029674/00ABECC87B4CB31F239FC5CE93594C71.webp",
             name = "Slim Fitness SLM Camiseta UV Masculina Proteção Solar",
             purchaseLink = "https://br.shein.com/Slim-Fitness-SLM-Men-T-Shirts-Tanks-p-12893370.html",
-            category = CategoryType.WORKOUT,
+            category = TagTypeClothes.SHIRTS,
             tags = listOf(StyleTag.WORKOUT, StyleTag.SUMMER),
             price = "R$ 159,90"
         ),
@@ -324,7 +362,7 @@ fun getProducts(): List<ClothingItem> {
             imageUrl = "https://img.ltwebstatic.com/images3_spmp/2024/12/19/80/17346196374ea253869f05097f48bd52ce0311635f.webp",
             name = "Camisa de Linho Manga curta Social",
             purchaseLink = "https://br.shein.com/Linen-Shirt-Short-Sleeve-Formal-Summer-Fresh-Italian-Collar-Elegant-In-Visco-Linen-p-50917714.html",
-            category = CategoryType.SUMMER,
+            category = TagTypeClothes.SHIRTS,
             tags = listOf(StyleTag.SUMMER, StyleTag.FORMAL),
             price = "R$ 159,90"
         ),
@@ -332,7 +370,7 @@ fun getProducts(): List<ClothingItem> {
             imageUrl = "https://img.ltwebstatic.com/images3_spmp/2024/01/30/1b/1706556936ae19911a343e9b7ba6a9732a033a3107.webp",
             name = "Calça Masculina Cargo Sarja Skatista",
             purchaseLink = "https://br.shein.com/Men-Jeans-p-30021128.html",
-            category = CategoryType.TREND,
+            category = TagTypeClothes.PANTS,
             tags = listOf(StyleTag.TREND, StyleTag.URBAN),
             price = "R$ 159,90"
         ),
@@ -340,7 +378,7 @@ fun getProducts(): List<ClothingItem> {
             imageUrl = "https://img.ltwebstatic.com/images3_spmp/2024/02/02/28/17068460474610b8f45f7cdfb741129b0b4b5abaa4.webp",
             name = "Bermuda Tecido Sarja",
             purchaseLink = "https://br.shein.com/Men-Shorts-p-13972715.html",
-            category = CategoryType.SUMMER,
+            category = TagTypeClothes.SHORTS,
             tags = listOf(StyleTag.SUMMER, StyleTag.CASUAL),
             price = "R$ 159,90"
         ),
@@ -348,7 +386,7 @@ fun getProducts(): List<ClothingItem> {
             imageUrl = "https://img.ltwebstatic.com/images3_spmp/2025/03/17/98/1742169872c605f20beaacf7759ac2b836b3552f2e.webp",
             name = "Calça Jeans Preta Bag Balão",
             purchaseLink = "https://br.shein.com/Bag-Balloon-Jeans-Wide-Straight-Cut-Carpenter-UNISEX-p-61215286.html",
-            category = CategoryType.CASUAL,
+            category = TagTypeClothes.PANTS,
             tags = listOf(StyleTag.CASUAL, StyleTag.URBAN),
             price = "R$ 159,90"
         ),
@@ -356,7 +394,7 @@ fun getProducts(): List<ClothingItem> {
             imageUrl = "https://img.ltwebstatic.com/images3_spmp/2024/05/11/0f/1715377920b0126e5f20bc09f5b644072328d33fa9.webp",
             name = "Camisa Social Masculina Manga Longa",
             purchaseLink = "https://br.shein.com/Men-Shirts-p-35387911.html",
-            category = CategoryType.FORMAL,
+            category = TagTypeClothes.SHIRTS,
             tags = listOf(StyleTag.FORMAL),
             price = "R$ 159,90"
         ),
@@ -364,22 +402,22 @@ fun getProducts(): List<ClothingItem> {
             imageUrl = "https://img.ltwebstatic.com/images3_spmp/2024/11/12/e6/1731413624c3341e72f036f0a25f8a12752a8de9f9.webp",
             name = "Camisa Camiseta Oversized Gola Alta Streetwear",
             purchaseLink = "https://br.shein.com/Shirt-Oversized-T-Shirt-Turtleneck-Streetwear-Men-And-Women-100-Cotton-Urban-Style-For-Training-And-Everyday-Black-And-Off-Whte-Printed-INVISIBLE-p-47641871.html",
-            category = CategoryType.URBAN,
+            category = TagTypeClothes.T_SHIRTS,
             tags = listOf(StyleTag.URBAN, StyleTag.TREND),
             price = "R$ 159,90"
         )
     )
 }
 
-fun getCategories(): List<CategoryType> {
+fun getCategories(): List<TagTypeClothes> {
     return listOf(
-        CategoryType.TREND,
-        CategoryType.SUMMER,
-        CategoryType.WINTER,
-        CategoryType.WORKOUT,
-        CategoryType.CASUAL,
-        CategoryType.FORMAL,
-        CategoryType.URBAN
+        TagTypeClothes.SHORTS,
+        TagTypeClothes.T_SHIRTS,
+        TagTypeClothes.SHIRTS,
+        TagTypeClothes.PANTS,
+        TagTypeClothes.JACKETS,
+        TagTypeClothes.ACCESSORIES,
+        TagTypeClothes.SHOES
     )
 }
 

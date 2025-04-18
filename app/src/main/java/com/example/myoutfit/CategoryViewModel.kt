@@ -14,7 +14,7 @@ class CategoryViewModel : ViewModel() {
     private val _error = mutableStateOf<String?>(null)
     val error: State<String?> get() = _error
 
-    fun loadProductsByCategory(categoryType: CategoryType) {
+    fun loadProductsByCategory(categoryType: TagTypeClothes) {
         _isLoading.value = true
         _error.value = null
 

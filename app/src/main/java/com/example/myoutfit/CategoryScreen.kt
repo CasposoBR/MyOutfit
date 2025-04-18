@@ -20,7 +20,7 @@ import androidx.navigation.NavHostController
 @Composable
 fun CategoryScreen(
     category: String,
-    categoryType: CategoryType,
+    categoryType: TagTypeClothes,
     viewModel: CategoryViewModel,
     navController: NavHostController,
     onBack: () -> Boolean = { navController.popBackStack() }

@@ -46,10 +46,13 @@ fun AppNavigation(navController: NavHostController) {
         composable("category/{categoryName}") { backStackEntry ->
             val categoryName = backStackEntry.arguments?.getString("categoryName") ?: ""
             val categoryViewModel: CategoryViewModel = hiltViewModel()
+
+            // Converte o nome da categoria em um enum TagTypeClothes
             val categoryType = try {
-                CategoryType.valueOf(categoryName)
+                TagTypeClothes.valueOf(categoryName)
             } catch (e: IllegalArgumentException) {
-                CategoryType.TREND
+                // Caso o nome da categoria não seja válido, retorna uma categoria padrão
+                TagTypeClothes.SHORTS // ou outra categoria padrão
             }
 
             CategoryScreen(
