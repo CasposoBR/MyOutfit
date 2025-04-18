@@ -21,31 +21,24 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.style.TextAlign
 
 @Composable
-fun MyOutfitHomeScreen() {
-    var selectedIndex by remember { mutableIntStateOf(0) }
+fun MyOutfitHomeScreen(navController: NavHostController) {
+    var selectedIndex by remember { mutableStateOf(0) }
 
     Scaffold(
         bottomBar = {
-            NavigationBar {
-                BottomNavItem.entries.forEachIndexed { index, item ->
-                    NavigationBarItem(
-                        icon = { Icon(imageVector = item.icon, contentDescription = item.label) },
-                        label = { Text(item.label) },
-                        selected = selectedIndex == index,
-                        onClick = { selectedIndex = index }
-                    )
-                }
-            }
+            BottomNavBar(selectedIndex = selectedIndex, onItemClick = { selectedIndex = it })
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -57,10 +50,24 @@ fun MyOutfitHomeScreen() {
         }
     }
 }
-data class Product(val imageUrl: String, val title: String, val link: String, val category: CategoryType)
+
+@Composable
+fun BottomNavBar(selectedIndex: Int, onItemClick: (Int) -> Unit) {
+    NavigationBar {
+        BottomNavItem.entries.forEachIndexed { index, item ->
+            NavigationBarItem(
+                icon = { Icon(imageVector = item.icon, contentDescription = item.label) },
+                label = { Text(item.label) },
+                selected = selectedIndex == index,
+                onClick = { onItemClick(index) }
+            )
+        }
+    }
+}
 
 enum class CategoryType {
-    SUMMER, WINTER, TREND, WORKOUT, CASUAL, FORMAL, URBAN
+    SUMMER, WINTER, TREND, WORKOUT, CASUAL, FORMAL, URBAN,
+    SHORTS, TSHIRT, JACKETS, PANTHS, SHOES, ALL
 }
 
 enum class BottomNavItem(val label: String, val icon: ImageVector) {
@@ -71,7 +78,184 @@ enum class BottomNavItem(val label: String, val icon: ImageVector) {
 
 @Composable
 fun HomeContent() {
-    val products = listOf(
+    val products = getProducts()
+    val categories = getCategories()
+
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+            .padding(16.dp)
+    ) {
+        categories.forEach { category ->
+            val filteredProducts = products.filter { it.categoryType == category }
+
+            if (filteredProducts.isNotEmpty()) {
+                CategorySection(title = category.name, products = filteredProducts)
+            }
+        }
+    }
+}
+
+@Composable
+fun CategorySection(title: String, products: List<Product>) {
+    Column {
+        Text(title, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+        Spacer(Modifier.height(8.dp))
+
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp)
+        ) {
+            items(products) { product ->
+                ProductCard(product = product)
+            }
+        }
+
+        Spacer(Modifier.height(24.dp))
+    }
+}
+
+@Composable
+fun ProductCard(product: Product) {
+    val context = LocalContext.current
+
+    ElevatedCard(
+        modifier = Modifier
+            .width(160.dp)
+            .height(240.dp)
+            .clickable {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(product.link))
+                context.startActivity(intent)
+            }
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AsyncImage(
+                model = product.imageUrl,
+                contentDescription = product.title,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .width(160.dp)
+                    .height(160.dp)
+            )
+            Text(
+                text = product.title,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun SearchContent() {
+    var searchQuery by remember { mutableStateOf("") }
+
+    val categories = getSearchCategories()
+
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp)) {
+
+        OutlinedTextField(
+            value = searchQuery,
+            onValueChange = { searchQuery = it },
+            label = { Text("Pesquise uma peça...") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        if (searchQuery.isNotBlank()) {
+            SearchResults(searchQuery, categories)
+        } else {
+            CategorySelection(categories)
+        }
+    }
+}
+
+@Composable
+fun SearchResults(query: String, categories: List<Category>) {
+    val filteredCategories = categories.filter {
+        it.name.contains(query, ignoreCase = true)
+    }
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(8.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        items(filteredCategories) { category ->
+            CategoryCard(category = category)
+        }
+    }
+}
+
+@Composable
+fun CategorySelection(categories: List<Category>) {
+    Text("Escolha uma categoria:", textAlign = TextAlign.Center)
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        contentPadding = PaddingValues(8.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        items(categories) { category ->
+            CategoryCard(category = category)
+        }
+    }
+}
+
+@Composable
+fun CategoryCard(category: Category) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { /* Navigate to category page */ },
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AsyncImage(
+            model = category.imageUrl,
+            contentDescription = category.name,
+            modifier = Modifier.size(80.dp)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = category.name,
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+fun FavoritesContent() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text("Seus favoritos aparecerão aqui", fontSize = 16.sp)
+    }
+}
+
+data class Product(val imageUrl: String, val title: String, val link: String, val categoryType: CategoryType)
+
+data class Category(val name: String, val imageUrl: String)
+
+
+
+
+fun getProducts(): List<Product> {
+    return listOf(
         Product(
             "https://img.ltwebstatic.com/images3_pi/2024/08/28/b7/1724811269f1b9f1b91b4f0b2dc34b7f2aca60c8a5.webp",
             "Jaqueta Preta PU",
@@ -159,94 +343,23 @@ fun HomeContent() {
         ),
 
 
-    )
-
-    val categoriesToShow = listOf(
-        Pair("Tendências", CategoryType.TREND),
-        Pair("Para o Verão", CategoryType.SUMMER),
-        Pair("Para o Inverno", CategoryType.WINTER),
-        Pair("Para o seu Treino", CategoryType.WORKOUT),
-        Pair("Roupas Casuais", CategoryType.CASUAL),
-        Pair("Roupas Formais", CategoryType.FORMAL),
-        Pair("Seja ousado", CategoryType.URBAN),
-    )
-
-    val scrollState = rememberScrollState()
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState)
-            .padding(16.dp)
-    ) {
-        categoriesToShow.forEach { (title, categoryType) ->
-            val filteredProducts = products.filter { it.category == categoryType }
-
-            if (filteredProducts.isNotEmpty()) {
-                Text(title, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                Spacer(Modifier.height(8.dp))
-
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp)
-                ) {
-                    items(filteredProducts) { product ->
-                        TrendCard(
-                            imageUrl = product.imageUrl,
-                            title = product.title,
-                            link = product.link
-                        )
-                    }
-                }
-
-                Spacer(Modifier.height(24.dp))
-            }
-        }
-    }
+        )
 }
 
-@Composable
-fun TrendCard(imageUrl: String, title: String, link: String) {
-    val context = LocalContext.current
-
-    ElevatedCard(
-        modifier = Modifier
-            .width(160.dp)
-            .height(240.dp)
-            .clickable {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-                context.startActivity(intent)
-            }
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            AsyncImage(
-                model = imageUrl,
-                contentDescription = title,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .width(160.dp)
-                    .height(160.dp)
-
-            )
-            Text(
-                text = title,
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
-    }
+fun getCategories(): List<CategoryType> {
+    return listOf(
+        CategoryType.TREND,
+        CategoryType.SUMMER,
+        CategoryType.WINTER,
+        CategoryType.WORKOUT,
+        CategoryType.CASUAL,
+        CategoryType.FORMAL,
+        CategoryType.URBAN
+    )
 }
 
-data class Category(val name: String, val imageUrl: String)
-
-@Composable
-fun SearchContent() {
-    var searchQuery by remember { mutableStateOf("") }
-
-    val categories = listOf(
+fun getSearchCategories(): List<Category> {
+    return listOf(
         Category("Jaquetas", "https://img.icons8.com/?size=100&id=1186&format=png&color=000000"),
         Category("Camisetas", "https://img.icons8.com/?size=100&id=105819&format=png&color=000000"),
         Category("Calças", "https://img.icons8.com/?size=100&id=1172&format=png&color=000000"),
@@ -254,79 +367,13 @@ fun SearchContent() {
         Category("Acessórios", "https://img.icons8.com/?size=100&id=DMhtuPky5Yql&format=png&color=000000"),
         Category("Camisas", "https://img.icons8.com/?size=100&id=1169&format=png&color=000000"),
         Category("Shorts", "https://img.icons8.com/?size=100&id=1174&format=png&color=000000"),
-
+        // Add more categories here...
     )
-
-    categories.filter {
-        it.name.contains(searchQuery, ignoreCase = true)
-    }
-
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
-
-        OutlinedTextField(
-            value = searchQuery,
-            onValueChange = { searchQuery = it },
-            label = { Text("Buscar roupas...") },
-            leadingIcon = {
-                Icon(Icons.Default.Search, contentDescription = "Ícone de busca")
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3), // Deixei 3 por linha pra encaixar melhor cards menores
-            contentPadding = PaddingValues(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxSize()
-        ) {
-            items(categories) { category ->
-                ElevatedCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(90.dp) // Reduzido pela metade
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        AsyncImage(
-                            model = category.imageUrl,
-                            contentDescription = category.name,
-                            modifier = Modifier
-                                .size(48.dp) // Ícone menor
-                        )
-                        Text(
-                            text = category.name,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Medium,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(horizontal = 4.dp)
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun FavoritesContent() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("Seus favoritos aparecerão aqui", fontSize = 16.sp)
-    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewMyOutfitHomeScreen() {
-    MyOutfitHomeScreen()
+    val fakeNavController = rememberNavController()
+    MyOutfitHomeScreen(navController = fakeNavController)
 }

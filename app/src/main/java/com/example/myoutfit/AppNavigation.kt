@@ -33,7 +33,17 @@ fun AppNavigation(
             )
         }
         composable("home") {
-            MyOutfitHomeScreen()
+            MyOutfitHomeScreen(navController)
+        }
+        composable("category/{categoryName}") { backStackEntry ->
+            val categoryName = backStackEntry.arguments?.getString("categoryName") ?: ""
+            val categoryType = try {
+                CategoryType.valueOf(categoryName)
+            } catch (e: IllegalArgumentException) {
+                CategoryType.TREND // fallback
+            }
+
+            CategoryProductsScreen(categoryType = categoryType, navController = navController)
         }
     }
 }
