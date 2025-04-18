@@ -27,7 +27,7 @@ import androidx.navigation.NavHostController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryProductsScreen(categoryType: CategoryType, navController: NavHostController) {
-    val products = remember(categoryType) { getProducts().filter { it.categoryType == categoryType } }
+    val products = remember(categoryType) { getProducts().filter { it.category == categoryType } }
 
     Scaffold(
         topBar = {

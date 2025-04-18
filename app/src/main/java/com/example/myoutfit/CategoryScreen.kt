@@ -55,7 +55,7 @@ fun CategoryScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(products) { product ->
-                    ProductCard(product = product as Product) // Cast para Product
+                    ProductCard(product = product)
                 }
             }
         }

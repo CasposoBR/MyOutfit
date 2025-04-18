@@ -2,7 +2,7 @@ package com.example.myoutfit
 
 
 enum class StyleTag {
-    TREND, SUMMER, WINTER, WORKOUT, CASUAL, FORMAL, URBAN
+    TREND, SUMMER, WINTER, WORKOUT, CASUAL, FORMAL, URBAN, OLDMONEY, CLASSIC
 }
 
 data class ClothingItem(
@@ -11,7 +11,7 @@ data class ClothingItem(
     val imageUrl: String,
     val purchaseLink: String,
     val category: CategoryType,
-    val tags: List<StyleTag> = emptyList()
+    val tags: List<StyleTag>
 )
 
 object ClothingInventory {
@@ -30,7 +30,7 @@ object ClothingInventory {
             imageUrl = "https://i.imgur.com/5T3aN4v.jpg",
             purchaseLink = "https://br.shein.com/Camisa-Social-Preta-Masculina-p-12345678.html",
             category = CategoryType.FORMAL,
-            tags = listOf(StyleTag.FORMAL)
+            tags = listOf(StyleTag.FORMAL, StyleTag.TREND,StyleTag.OLDMONEY )
         ),
         ClothingItem(
             name = "Tênis Branco Minimalista",
