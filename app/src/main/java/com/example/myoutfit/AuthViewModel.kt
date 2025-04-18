@@ -23,7 +23,7 @@ class AuthViewModel @Inject constructor(
 
     fun configureGoogleSignIn(context: Context) {
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("253613913863-i76s4mrirgclb8or61cre7q7mh45ksu5.apps.googleusercontent.com") // ✅ Seu Client ID
+            .requestIdToken("253613913863-i76s4mrirgclb8or61cre7q7mh45ksu5.apps.googleusercontent.com")
             .requestEmail()
             .build()
 
@@ -54,7 +54,6 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    // ✅ Novo método para login com email/senha
     fun signInWithEmailAndPassword(
         email: String,
         password: String,

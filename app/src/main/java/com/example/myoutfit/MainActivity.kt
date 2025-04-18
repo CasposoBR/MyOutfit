@@ -42,10 +42,8 @@ class MainActivity : ComponentActivity() {
             MyOutfitTheme {
                 val navController = rememberNavController()
                 AppNavigation(
-                    navController = navController,
-                    authViewModel = authViewModel,
-                    googleSignInLauncher = googleSignInLauncher,
-                    firebaseAuth = firebaseAuth // 🔹 Passando o auth
+                    navController = navController
+                    // 🔹 Passando o auth
                 )
             }
         }

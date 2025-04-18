@@ -1,6 +1,6 @@
 package com.example.myoutfit
 
-import android.content.Intent
+    import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,16 +20,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -38,12 +37,13 @@ fun LoginScreen(
     auth: FirebaseAuth,
     authViewModel: AuthViewModel,
     launcher: ActivityResultLauncher<Intent>,
-    navController: NavController
+    navController: NavHostController
 ) {
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-
+    val coroutineScope = rememberCoroutineScope() // Usando o coroutineScope do Composable
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -61,6 +61,7 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
+                // Campo de email
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
@@ -70,6 +71,7 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Campo de senha
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
@@ -80,12 +82,15 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Botão de login
                 Button(
                     onClick = {
-                        CoroutineScope(Dispatchers.Main).launch {
+                        coroutineScope.launch {
                             try {
                                 auth.signInWithEmailAndPassword(email, password).await()
-                                navController.navigate("home")
+                                navController.navigate("home") {
+                                    popUpTo("login") { inclusive = true } // Para garantir que o usuário não consiga voltar para a tela de login
+                                }
                             } catch (e: FirebaseAuthInvalidCredentialsException) {
                                 errorMessage = "Credenciais inválidas"
                             } catch (e: Exception) {
@@ -100,6 +105,7 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Botão de navegação para tela de registro
                 Button(
                     onClick = { navController.navigate("register") },
                     modifier = Modifier.fillMaxWidth()
@@ -109,6 +115,7 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Botão de login com Google
                 Button(
                     onClick = {
                         launcher.launch(authViewModel.getGoogleSignInIntent())
@@ -118,6 +125,7 @@ fun LoginScreen(
                     Text("Login com Google")
                 }
 
+                // Exibe mensagem de erro se houver
                 errorMessage?.let {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(text = it, color = MaterialTheme.colorScheme.error)

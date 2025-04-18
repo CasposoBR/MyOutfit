@@ -43,9 +43,9 @@ fun MyOutfitHomeScreen(navController: NavHostController) {
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             when (selectedIndex) {
-                0 -> HomeContent()
-                1 -> SearchContent()
-                2 -> FavoritesContent()
+                0 -> HomeContent(navController)
+                1 -> SearchContent(navController)
+                2 -> FavoritesContent(navController)
             }
         }
     }
@@ -77,7 +77,7 @@ enum class BottomNavItem(val label: String, val icon: ImageVector) {
 }
 
 @Composable
-fun HomeContent() {
+fun HomeContent(navController: NavHostController) {
     val products = getProducts()
     val categories = getCategories()
 
@@ -93,14 +93,14 @@ fun HomeContent() {
             val filteredProducts = products.filter { it.categoryType == category }
 
             if (filteredProducts.isNotEmpty()) {
-                CategorySection(title = category.name, products = filteredProducts)
+                CategorySection(title = category.name, products = filteredProducts, navController = navController)
             }
         }
     }
 }
 
 @Composable
-fun CategorySection(title: String, products: List<Product>) {
+fun CategorySection(title: String, products: List<Product>, navController: NavHostController) {
     Column {
         Text(title, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
         Spacer(Modifier.height(8.dp))
@@ -153,7 +153,7 @@ fun ProductCard(product: Product) {
 }
 
 @Composable
-fun SearchContent() {
+fun SearchContent(navController: NavHostController) {
     var searchQuery by remember { mutableStateOf("") }
 
     val categories = getSearchCategories()
@@ -172,15 +172,15 @@ fun SearchContent() {
         Spacer(modifier = Modifier.height(16.dp))
 
         if (searchQuery.isNotBlank()) {
-            SearchResults(searchQuery, categories)
+            SearchResults(searchQuery, categories, navController)
         } else {
-            CategorySelection(categories)
+            CategorySelection(categories, navController)
         }
     }
 }
 
 @Composable
-fun SearchResults(query: String, categories: List<Category>) {
+fun SearchResults(query: String, categories: List<Category>, navController: NavHostController) {
     val filteredCategories = categories.filter {
         it.name.contains(query, ignoreCase = true)
     }
@@ -193,13 +193,13 @@ fun SearchResults(query: String, categories: List<Category>) {
         modifier = Modifier.fillMaxSize()
     ) {
         items(filteredCategories) { category ->
-            CategoryCard(category = category)
+            CategoryCard(category = category, navController = navController)
         }
     }
 }
 
 @Composable
-fun CategorySelection(categories: List<Category>) {
+fun CategorySelection(categories: List<Category>, navController: NavHostController) {
     Text("Escolha uma categoria:", textAlign = TextAlign.Center)
 
     LazyVerticalGrid(
@@ -210,17 +210,20 @@ fun CategorySelection(categories: List<Category>) {
         modifier = Modifier.fillMaxSize()
     ) {
         items(categories) { category ->
-            CategoryCard(category = category)
+            CategoryCard(category = category, navController = navController)
         }
     }
 }
 
 @Composable
-fun CategoryCard(category: Category) {
+fun CategoryCard(category: Category, navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { /* Navigate to category page */ },
+            .clickable {
+                // Navegar para a tela de categoria com base no nome da categoria
+                navController.navigate("category/${category.name}")
+            },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AsyncImage(
@@ -238,7 +241,7 @@ fun CategoryCard(category: Category) {
 }
 
 @Composable
-fun FavoritesContent() {
+fun FavoritesContent(navController: NavHostController) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -247,9 +250,11 @@ fun FavoritesContent() {
     }
 }
 
-data class Product(val imageUrl: String, val title: String, val link: String, val categoryType: CategoryType)
+data class Product
+    (val imageUrl: String, val title: String, val link: String, val categoryType: CategoryType, val tags: String, val price: String)
 
-data class Category(val name: String, val imageUrl: String)
+data class Category
+    (val name: String, val imageUrl: String)
 
 
 
@@ -260,61 +265,89 @@ fun getProducts(): List<Product> {
             "https://img.ltwebstatic.com/images3_pi/2024/08/28/b7/1724811269f1b9f1b91b4f0b2dc34b7f2aca60c8a5.webp",
             "Jaqueta Preta PU",
             "https://br.shein.com/SWAVVY-Men-s-Fashionable-Daily-Casual-PU-Leather-Fitted-Long-Sleeve-Men-Jacket-Urban-Black-Jacket-For-Friends-Husband-Boyfriend-Gifts-p-41641968.html?mallCode=1&imgRatio=3-4",
-            CategoryType.WINTER
+            CategoryType.WINTER,
+            tags = "Casual, Fashion, A Noite",
+            price = "R$ 199,99"
         ),
         Product(
             "https://img.ltwebstatic.com/images3_spmp/2024/10/03/d3/172796272339daa9f54e33fe4bff473d187a24f118_thumbnail_336x.webp",
             "Camiseta Oversized",
             "https://br.shein.com/Men-T-Shirts-p-25143085.html",
-            CategoryType.TREND
+            CategoryType.TREND ,
+            tags = "Estilo, Oversized, camiseta, Versátil",
+            price = "R$ 79,90"
         ),
         Product(
             "https://img.ltwebstatic.com/images3_spmp/2023/06/12/16865104766b5b3b261d29d57196290c691452416f.webp",
             "Jaqueta Jeans",
             "https://br.shein.com/Men-Denim-Jackets-p-14722960.html",
-            CategoryType.WINTER
+            CategoryType.WINTER,
+            tags = "Casual, Jeans, Versátil ",
+            price = "R$ 159,90"
+
         ),
         Product(
             "https://img.ltwebstatic.com/images3_pi/2024/03/06/59/17097300463527cb3179a7e75552444fd907ba6b23.webp",
             "Calça Alfaiataria",
             "https://br.shein.com/Manfinity-Homme-Men-s-Casual-Solid-Color-Slant-Pocket-Drawstring-Pants-Straight-Leg-Long-Slacks-Plain-Going-Out-p-3115655.html",
             CategoryType.TREND
+            ,
+            tags = "Fashion, Tendencia, Versátil",
+            price = "R$ 159,90"
         ),
         Product(
             "https://img.ltwebstatic.com/images3_spmp/2023/09/02/9a/1693662275a6500efb50040557607c45a67aa3b08c.webp",
             "Regata Canelada",
             "https://br.shein.com/Men-Tank-Tops-p-22602261.html",
             CategoryType.SUMMER
+            ,
+            tags = "Casual, Jeans",
+            price = "R$ 159,90"
         ),
         Product(
             "https://img.ltwebstatic.com/images3_spmp/2025/02/19/4c/17399750382ff6a6719daecabbd80697b67f8fc201_square.webp",
             "Camisa Dry Fit",
             "https://br.shein.com/Men-s-Short-Sleeve-Dry-Fit-Gym-Fitness-T-Shirt-Lisa-Plus-Size-Zoo-p-48405365.html",
             CategoryType.WORKOUT
+            ,
+            tags = "Casual, Jeans",
+            price = "R$ 159,90"
         ),
         Product(
             "https://img.ltwebstatic.com/images3_spmp/2024/08/17/97/1723836643d25ffdb991394f79b4bce2ac1d8f3419_thumbnail_336x.webp",
             "Camisa Oversized Academia Fit",
             "https://br.shein.com/Oversized-Shirt-Gym-Fashion-Fit-Bodybuilding-p-40991466.html",
             CategoryType.WORKOUT
+            ,
+            tags = "Casual, Jeans",
+            price = "R$ 159,90"
         ),
         Product(
             "https://img.ltwebstatic.com/gspCenter/goodsImage/2023/1/31/4832058447_1029674/00ABECC87B4CB31F239FC5CE93594C71.webp",
             "Slim Fitness SLM Camiseta UV Masculina Proteção Solar",
             "https://br.shein.com/Slim-Fitness-SLM-Men-T-Shirts-Tanks-p-12893370.html",
             CategoryType.WORKOUT
+            ,
+            tags = "Casual, Jeans",
+            price = "R$ 159,90"
         ),
         Product(
             "https://img.ltwebstatic.com/images3_spmp/2024/12/19/80/17346196374ea253869f05097f48bd52ce0311635f.webp",
             "Camisa de Linho Manga curta Social",
             "br.shein.com/Linen-Shirt-Short-Sleeve-Formal-Summer-Fresh-Italian-Collar-Elegant-In-Visco-Linen-p-50917714.html",
             CategoryType.SUMMER
+            ,
+            tags = "Casual, Jeans",
+            price = "R$ 159,90"
         ),
         Product(
             "https://img.ltwebstatic.com/images3_spmp/2024/01/30/1b/1706556936ae19911a343e9b7ba6a9732a033a3107.webp",
             "Calça Masculina Cargo Sarja Skatista",
             "https://br.shein.com/Men-Jeans-p-30021128.html",
             CategoryType.TREND
+            ,
+            tags = "Casual, Jeans",
+            price = "R$ 159,90"
         ),
 
         Product(
@@ -322,24 +355,36 @@ fun getProducts(): List<Product> {
             "Bermuda Tecido Sarja",
             "br.shein.com/Men-Shorts-p-13972715.html",
             CategoryType.SUMMER
+            ,
+            tags = "Casual, Jeans",
+            price = "R$ 159,90"
         ),
         Product(
             "https://img.ltwebstatic.com/images3_spmp/2025/03/17/98/1742169872c605f20beaacf7759ac2b836b3552f2e.webp",
             "Calça Jeans Preta Bag Balão",
             "https://br.shein.com/Bag-Balloon-Jeans-Wide-Straight-Cut-Carpenter-UNISEX-p-61215286.html",
             CategoryType.CASUAL
+            ,
+            tags = "Casual, Jeans",
+            price = "R$ 159,90"
         ),
         Product(
             "https://img.ltwebstatic.com/images3_spmp/2024/05/11/0f/1715377920b0126e5f20bc09f5b644072328d33fa9.webp",
             "Camisa Social Masculina Manga Longa",
             "br.shein.com/Men-Shirts-p-35387911.html",
             CategoryType.FORMAL
+            ,
+            tags = "Casual, Jeans",
+            price = "R$ 159,90"
         ),
         Product(
             "https://img.ltwebstatic.com/images3_spmp/2024/11/12/e6/1731413624c3341e72f036f0a25f8a12752a8de9f9.webp",
             "Camisa Camiseta Oversized Gola Alta Streetwear",
             "br.shein.com/Shirt-Oversized-T-Shirt-Turtleneck-Streetwear-Men-And-Women-100-Cotton-Urban-Style-For-Training-And-Everyday-Black-And-Off-Whte-Printed-INVISIBLE-p-47641871.html",
             CategoryType.URBAN
+            ,
+            tags = "Casual, Jeans",
+            price = "R$ 159,90"
         ),
 
 
