@@ -38,6 +38,7 @@ foundationLayoutAndroid = "1.7.0"
 uiTestAndroid = "1.7.8"
 foundationAndroid = "1.7.0"
 litertSupportApi = "1.2.0"
+roomCommonJvm = "2.7.0"
 
 [libraries]
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
@@ -81,6 +82,7 @@ foundation-layout-android = { group = "androidx.compose.foundation", name = "fou
 ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version.ref = "uiTestAndroid" }
 foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
 litert-support-api = { group = "com.google.ai.edge.litert", name = "litert-support-api", version.ref = "litertSupportApi" }
+room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
 
 [plugins]
 kotlin_kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

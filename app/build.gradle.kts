@@ -85,6 +85,7 @@ dependencies {
     implementation(libs.foundation.layout.android)
     implementation(libs.foundation.layout.android)
     implementation(libs.litert.support.api)
+    implementation(libs.room.common.jvm)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.kotlin.stdlib)

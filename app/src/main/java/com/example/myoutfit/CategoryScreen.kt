@@ -31,8 +31,8 @@ fun CategoryScreen(
     }
 
     val products = viewModel.products.value
-    val isLoading = viewModel.isLoading.value
-    val error = viewModel.error.value
+    val isLoading = viewModel.isLoading.collectAsState().value
+    val error = viewModel.error.collectAsState().value
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text(
