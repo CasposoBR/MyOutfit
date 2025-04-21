@@ -1,5 +1,6 @@
 package com.example.myoutfit
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,11 +28,11 @@ fun CategoryScreen(
     onBack: () -> Boolean = { navController.popBackStack() }
 ) {
     // Carregar os produtos quando a tela for composta
-    LaunchedEffect(categoryType) {
-        viewModel.loadProductsByCategory(categoryType)
+    LaunchedEffect(category) {
+        viewModel.loadProductsByCategory(category)
     }
 
-    val products = viewModel.products.value
+    val products = viewModel.products.collectAsState().value
     val isLoading = viewModel.isLoading.collectAsState().value
     val error = viewModel.error.collectAsState().value
 

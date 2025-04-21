@@ -9,15 +9,12 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ClothingItemDao {
 
+    @Query("SELECT * FROM clothing_item WHERE category = :category")
+    fun getItemsByCategory(category: String): Flow<List<ClothingItem>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(items: List<ClothingItem>)
 
-    @Query("SELECT * FROM clothing_items")
+    @Query("SELECT * FROM clothing_item")
     fun getAllItems(): Flow<List<ClothingItem>>
-
-    @Query("SELECT * FROM clothing_items WHERE category = :category")
-    fun getItemsByCategory(category: TagTypeClothes): Flow<List<ClothingItem>>
-
-
-
 }

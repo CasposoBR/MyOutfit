@@ -20,11 +20,12 @@ class ClothingViewModel(
 
     fun insertInitialData() {
         viewModelScope.launch {
-            repository.insertInitialData()
+            // Passar a lista de itens para a função insertInitialData
+            repository.insertInitialData(ClothingInventory.items) // Ou qualquer lista que você tenha
         }
     }
 
     fun getByCategory(category: TagTypeClothes): Flow<List<ClothingItem>> {
-        return repository.getRoupasPorCategoria(category)
+        return repository.getRoupasPorCategoria(category.name)
     }
 }
