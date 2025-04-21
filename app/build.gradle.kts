@@ -7,7 +7,7 @@ plugins {
 
     id("com.google.gms.google-services")
     id("com.google.dagger.hilt.android")
-
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -85,7 +85,7 @@ dependencies {
     // Room
     implementation(libs.room.runtime.android)  // Room Runtime
     implementation(libs.room.ktx)              // Room KTX
-    kapt(libs.room.compiler)             // 'room-compiler' para geração de implementações
+    ksp(libs.room.compiler.v250)            // 'room-compiler' para geração de implementações
 
     // Compose + Material3
     implementation(libs.navigation.compose)

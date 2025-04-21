@@ -29,6 +29,7 @@ junit = "4.13.2"
 androidxJunit = "1.1.5"
 espressoCore = "3.6.1"
 
+roomCompiler = "2.5.0"
 ui = "1.7.8"
 uiTooling = "1.7.8"
 uiTestJunit4 = "1.7.8"
@@ -81,6 +82,7 @@ espresso_core = { group = "androidx.test.espresso", name = "espresso-core", vers
 navigation_compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 kotlin_stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlinStdlib" }
 foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
+room-compiler-v250 = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version.ref = "uiTestAndroid" }
 foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
 litert-support-api = { group = "com.google.ai.edge.litert", name = "litert-support-api", version.ref = "litertSupportApi" }
