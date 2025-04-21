@@ -1,6 +1,7 @@
 [versions]
 coilCompose = "2.5.0"
 coilComposeVersion = "2.4.0"
+hiltNavigationCompose = "1.1libs.hilt.lifecycle.viewmodel"
 kotlin = "2.1.0"
 agp = "8.6.0"
 
@@ -33,13 +34,13 @@ uiTooling = "1.7.8"
 uiTestJunit4 = "1.7.8"
 toolingPreview = "1.5.0"
 
+
 kotlinStdlib = "2.1.10"
 foundationLayoutAndroid = "1.7.0"
 uiTestAndroid = "1.7.8"
 foundationAndroid = "1.7.0"
 litertSupportApi = "1.2.0"
-roomCommonJvm = "2.7.0"
-roomRuntimeAndroid = "2.7.0"
+room = "2.7.0"
 
 [libraries]
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
@@ -83,8 +84,11 @@ foundation-layout-android = { group = "androidx.compose.foundation", name = "fou
 ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version.ref = "uiTestAndroid" }
 foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
 litert-support-api = { group = "com.google.ai.edge.litert", name = "litert-support-api", version.ref = "litertSupportApi" }
-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
-room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
+room-common-jvm = { group = "androidx.room", name = "room-common", version.ref = "room" }
+room-runtime-android = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-compiler-ksp = { group = "androidx.room", name = "room.compiler.ksp", version.ref = "room" }
 
 [plugins]
 kotlin_kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

@@ -7,6 +7,7 @@ plugins {
 
     id("com.google.gms.google-services")
     id("com.google.dagger.hilt.android")
+
 }
 
 android {
@@ -72,24 +73,19 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.perf)
+
     // Google Auth
     implementation(libs.play.services.auth)
 
     // Hilt
     implementation(libs.hilt.android)
-    implementation(libs.foundation.layout.android)
-    implementation(libs.ui.test.android)
-    implementation(libs.foundation.android)
-    implementation(libs.foundation.android)
-    implementation(libs.foundation.layout.android)
-    implementation(libs.foundation.layout.android)
-    implementation(libs.foundation.layout.android)
-    implementation(libs.litert.support.api)
-    implementation(libs.room.common.jvm)
-    implementation(libs.room.runtime.android)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
-    implementation(libs.kotlin.stdlib)
+
+    // Room
+    implementation(libs.room.runtime.android)  // Room Runtime
+    implementation(libs.room.ktx)              // Room KTX
+    kapt(libs.room.compiler)             // 'room-compiler' para geração de implementações
 
     // Compose + Material3
     implementation(libs.navigation.compose)
@@ -101,12 +97,6 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.compose.ui.tooling.preview)
 
-    //outros
-    implementation(libs.coil.compose)
-    // Testes
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(libs.compose.ui.test.junit4)
-    debugImplementation(libs.compose.ui.tooling)
+    // Kotlin
+    implementation(libs.kotlin.stdlib)
 }
