@@ -14,5 +14,13 @@ class ClothingRepository @Inject constructor(private val dao: ClothingItemDao) {
     suspend fun insertInitialData(items: List<ClothingItem>) {
         dao.insertAll(items)
     }
+    suspend fun insertInitialDataIfNeeded(items: List<ClothingItem>) {
+        val currentItems = dao.getAllItemsOnce() // cria uma função DAO que retorna List<ClothingItem>
+        if (currentItems.isEmpty()) {
+            dao.insertAll(items)
+        }
+    }
+
+
 
 }

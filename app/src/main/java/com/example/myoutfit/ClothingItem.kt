@@ -10,7 +10,7 @@ enum class StyleTag {
 enum class TagTypeClothes {
     SHORTS, T_SHIRTS, SHIRTS, PANTS, JACKETS, ACCESSORIES, SHOES
 }
-@Entity(tableName = "clothing_items")
+@Entity(tableName = "clothing_item")
 data class ClothingItem(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,

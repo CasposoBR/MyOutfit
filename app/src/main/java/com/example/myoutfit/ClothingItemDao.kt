@@ -16,5 +16,8 @@ interface ClothingItemDao {
     suspend fun insertAll(items: List<ClothingItem>)
 
     @Query("SELECT * FROM clothing_item")
+    suspend fun getAllItemsOnce(): List<ClothingItem>
+
+    @Query("SELECT * FROM clothing_item")
     fun getAllItems(): Flow<List<ClothingItem>>
 }

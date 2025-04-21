@@ -134,6 +134,8 @@ fun SectionTitle(title: String) {
 
 @Composable
 fun CategorySection(title: String, products: List<ClothingItem>, navController: NavHostController) {
+    val context = LocalContext.current
+
     Column {
         Text(title, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
         Spacer(Modifier.height(8.dp))
@@ -143,16 +145,21 @@ fun CategorySection(title: String, products: List<ClothingItem>, navController: 
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
             items(products) { product ->
-                ProductCard(product = product)
+                ProductCard(
+                    product = product,
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(product.purchaseLink))
+                        context.startActivity(intent)
+                    }
+                )
             }
         }
 
         Spacer(Modifier.height(24.dp))
     }
 }
-
 @Composable
-fun ProductCard(product: ClothingItem) {
+fun ProductCard(product: ClothingItem, onClick: () -> Unit) {
     val context = LocalContext.current
 
     ElevatedCard(
