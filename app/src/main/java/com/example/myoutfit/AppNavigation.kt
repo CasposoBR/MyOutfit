@@ -12,7 +12,7 @@ import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun AppNavigation(navController: NavHostController) {
+fun AppNavigation(navController: NavHostController,  auth: FirebaseAuth) {
     val auth = FirebaseAuth.getInstance()
 
     // Launcher para o login com Google
@@ -45,9 +45,9 @@ fun AppNavigation(navController: NavHostController) {
             MyOutfitHomeScreen(navController)
         }
 
-        // Rota para a tela de erro
         composable("error") {
-            ErrorScreen(navController = navController)
+            // Passando navController.popBackStack() como onBack
+            ErrorScreen(onBack = { navController.popBackStack() })
         }
 
         composable(
@@ -56,7 +56,7 @@ fun AppNavigation(navController: NavHostController) {
         ) { backStackEntry ->
             val categoryName = backStackEntry.arguments?.getString("categoryName") ?: ""
             val categoryType = try {
-                TagTypeClothes.valueOf(categoryName.uppercase())
+                TagTypeClothes.valueOf(categoryName.uppercase()) // Certifique-se de que o nome da categoria corresponde ao valor do Enum
             } catch (e: IllegalArgumentException) {
                 null
             }
@@ -65,12 +65,14 @@ fun AppNavigation(navController: NavHostController) {
             if (categoryType == null) {
                 navController.navigate("error")
             } else {
+                // Passando corretamente o categoryType, viewModel e navController para CategoryScreen
                 CategoryScreen(
-                    categoryType = categoryType,
-                    viewModel = hiltViewModel(),
-                    navController = navController
+                    categoryType = categoryType, // Passando a categoria para a tela de categoria
+                    viewModel = hiltViewModel(), // Passando o ViewModel
+                    navController = navController // Passando o navController para navegar
                 )
             }
         }
     }
 }
+

@@ -3,8 +3,21 @@ package com.example.myoutfit
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -16,8 +29,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -186,6 +210,7 @@ fun ProductCard(product: ClothingItem, onClick: @Composable () -> Unit) {
 fun SearchContent(navController: NavHostController) {
     var searchQuery by remember { mutableStateOf("") }
     val products = getProducts()
+    var showContent by remember { mutableStateOf(true) }
 
     Column(
         modifier = Modifier
@@ -194,7 +219,10 @@ fun SearchContent(navController: NavHostController) {
     ) {
         OutlinedTextField(
             value = searchQuery,
-            onValueChange = { searchQuery = it },
+            onValueChange = {
+                searchQuery = it
+                showContent = true // Reinicia a visibilidade ao digitar
+            },
             label = { Text("Pesquise uma peça...") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -203,13 +231,12 @@ fun SearchContent(navController: NavHostController) {
 
         val filteredProducts = filterProductsByQuery(products, searchQuery)
 
-        if (filteredProducts.isEmpty() && searchQuery.isNotBlank()) {
-            ErrorScreen(
-                onBack = {
-                    searchQuery = ""
-                }
-            )
-        } else {
+        // Mostra os produtos filtrados
+        AnimatedVisibility(
+            visible = filteredProducts.isNotEmpty() || searchQuery.isBlank(),
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
                 contentPadding = PaddingValues(8.dp),
@@ -227,6 +254,22 @@ fun SearchContent(navController: NavHostController) {
                     )
                 }
             }
+        }
+
+        // Tela de erro se não houver resultados
+        AnimatedVisibility(
+            visible = filteredProducts.isEmpty() && searchQuery.isNotBlank(),
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            ErrorScreen(
+                onBack = {
+                    // Resetando a pesquisa ao voltar
+                    showContent = false
+                    searchQuery = ""  // Limpa o campo de pesquisa
+                    showContent = true
+                }
+            )
         }
     }
 }

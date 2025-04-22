@@ -25,7 +25,7 @@ fun ErrorScreen(onBack: () -> Unit) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Não procuramos o tipo de item desejado.",
+            text = "Não achamos o tipo de item desejado.",
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.height(16.dp))

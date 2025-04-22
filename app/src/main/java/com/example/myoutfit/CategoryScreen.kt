@@ -1,63 +1,54 @@
 package com.example.myoutfit
 
-import androidx.compose.foundation.layout.Arrangement
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 
 @Composable
-fun CategoryScreen(
-    categoryType: TagTypeClothes,
-    viewModel: CategoryViewModel,
-    navController: NavHostController
-) {
-    val products by viewModel.products.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val error by viewModel.error.collectAsState()
+fun CategoryScreen(categoryType: TagTypeClothes, viewModel: ClothingViewModel, navController: NavHostController) {
+    val products = viewModel.getProductsByCategory(categoryType).collectAsState()
 
-    LaunchedEffect(categoryType) {
-        viewModel.insertInitialDataOnce()
-        viewModel.loadProductsByCategory(categoryType.name)
-    }
+    Column(modifier = Modifier.fillMaxSize()) {
+        Text(
+            text = "Itens da categoria: ${categoryType.name}",
+            style = MaterialTheme.typography.titleLarge
+        )
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        if (isLoading) {
-            Text("Carregando...", style = MaterialTheme.typography.bodyLarge)
-        } else if (error != null) {
-            Text("Erro: $error", style = MaterialTheme.typography.bodyLarge)
-        } else {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(products) { product ->
-                    ProductCard(
-                        product = product,
-                        onClick = {
-                            // Navegar para detalhes ou fazer algo
-                        }
-                    )
-                }
+        LazyColumn(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            items(products.value) { product ->
+                ProductCard(
+                    product = product,
+                    onClick = {
+                        // Lógica para navegar ou abrir os detalhes do produto
+                    }
+                )
             }
+        }
+
+        Button(onClick = {
+            // Navegar de volta
+            navController.popBackStack()
+        }) {
+            Text("Voltar")
         }
     }
 }

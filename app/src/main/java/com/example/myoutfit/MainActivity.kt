@@ -23,27 +23,29 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Configuração do SignIn
         authViewModel.configureGoogleSignIn(this)
 
-        googleSignInLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                val data = result.data
-                authViewModel.handleGoogleSignInResult(data) { success, message ->
-                    if (success) {
-                        Toast.makeText(this, "Login com Google feito com sucesso", Toast.LENGTH_SHORT).show()
-                        // Você pode navegar com base em um estado se quiser
-                    } else {
-                        Toast.makeText(this, "Erro no login com Google: $message", Toast.LENGTH_SHORT).show()
-                    }
+        // Registro do Launcher para o resultado do login com Google
+        googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val data = result.data
+            authViewModel.handleGoogleSignInResult(data) { success, message ->
+                if (success) {
+                    Toast.makeText(this, "Login com Google feito com sucesso", Toast.LENGTH_SHORT).show()
+                    // Aqui você pode navegar com base em algum estado ou ação
+                } else {
+                    Toast.makeText(this, "Erro no login com Google: $message", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
 
         setContent {
             MyOutfitTheme {
                 val navController = rememberNavController()
+                // Passando o navController e o authViewModel para o AppNavigation
                 AppNavigation(
-                    navController = navController
-                    // 🔹 Passando o auth
+                    navController = navController,
+                    auth = firebaseAuth // Passando o FirebaseAuth
                 )
             }
         }
