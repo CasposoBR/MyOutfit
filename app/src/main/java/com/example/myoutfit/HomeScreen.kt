@@ -1,4 +1,4 @@
-// TODO: Organizar categorias corretamente
+
 package com.example.myoutfit
 
 import android.content.Intent
@@ -36,6 +36,8 @@ import coil.compose.AsyncImage
 fun MyOutfitHomeScreen(navController: NavHostController) {
     var selectedIndex by remember { mutableStateOf(0) }
 
+
+
     Scaffold(
         bottomBar = {
             BottomNavBar(selectedIndex = selectedIndex, onItemClick = { selectedIndex = it })
@@ -50,6 +52,8 @@ fun MyOutfitHomeScreen(navController: NavHostController) {
         }
     }
 }
+
+
 
 @Composable
 fun BottomNavBar(selectedIndex: Int, onItemClick: (Int) -> Unit) {
@@ -73,9 +77,7 @@ enum class BottomNavItem(val label: String, val icon: ImageVector) {
 
 @Composable
 fun HomeContent(navController: NavHostController) {
-    val products = getProducts() // Obtendo a lista de produtos
-    val categories = TagTypeClothes.entries.toTypedArray() // Obtendo todas as categorias de roupas (do enum TagTypeClothes)
-
+    val products = getProducts()
     val scrollState = rememberScrollState()
 
     Column(
@@ -84,42 +86,33 @@ fun HomeContent(navController: NavHostController) {
             .verticalScroll(scrollState)
             .padding(16.dp)
     ) {
-        // Seção de "Para o seu verão", "Para o seu inverno", "Tendências"
-        // Exibindo essas vitrine de maneira destacada
-
+        // Seções baseadas em estilo
         SectionTitle("Tendências")
-        val trendProducts = products.filter { product -> product.tags.contains(StyleTag.TREND) }
-        CategorySection(title = "Tendências", products = trendProducts, navController = navController)
-
+        CategorySection(products.filter { it.tags.contains(StyleTag.TREND) }, navController)
 
         SectionTitle("Para o seu verão")
-        val summerProducts = products.filter { product -> product.tags.contains(StyleTag.SUMMER) }
-        CategorySection(title = "Para o seu verão", products = summerProducts, navController = navController)
+        CategorySection(products.filter { it.tags.contains(StyleTag.SUMMER) }, navController)
 
         SectionTitle("Para o seu inverno")
-        val winterProducts = products.filter { product -> product.tags.contains(StyleTag.WINTER) }
-        CategorySection(title = "Para o seu inverno", products = winterProducts, navController = navController)
+        CategorySection(products.filter { it.tags.contains(StyleTag.WINTER) }, navController)
 
         SectionTitle("Para o seu treino")
-        val workoutProducts = products.filter { product -> product.tags.contains(StyleTag.WORKOUT) }
-        CategorySection(title = "Para o seu treino", products = workoutProducts, navController = navController)
+        CategorySection(products.filter { it.tags.contains(StyleTag.WORKOUT) }, navController)
 
         SectionTitle("Se destaque")
-        val formalProducts = products.filter { product -> product.tags.contains(StyleTag.FORMAL) }
-        CategorySection(title = "Se destaque", products = formalProducts, navController = navController)
+        CategorySection(products.filter { it.tags.contains(StyleTag.FORMAL) }, navController)
 
-        // Exibindo as categorias baseadas no TagTypeClothes
-        categories.forEach { category ->
-            val filteredProducts = products.filter { product ->
-                product.category == category // Filtra por categoria
-            }
-
-            if (filteredProducts.isNotEmpty()) {
-                CategorySection(title = category.name, products = filteredProducts, navController = navController)
+        // Seções baseadas na categoria (ex: calças, camisetas...)
+        TagTypeClothes.entries.forEach { category ->
+            val categoryProducts = products.filter { it.category == category }
+            if (categoryProducts.isNotEmpty()) {
+                SectionTitle(category.displayName)
+                CategorySection(categoryProducts, navController)
             }
         }
     }
 }
+
 
 
 
@@ -133,33 +126,30 @@ fun SectionTitle(title: String) {
 }
 
 @Composable
-fun CategorySection(title: String, products: List<ClothingItem>, navController: NavHostController) {
+fun CategorySection(products: List<ClothingItem>, navController: NavHostController) {
     val context = LocalContext.current
 
-    Column {
-        Text(title, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-        Spacer(Modifier.height(8.dp))
-
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
-        ) {
-            items(products) { product ->
-                ProductCard(
-                    product = product,
-                    onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(product.purchaseLink))
-                        context.startActivity(intent)
-                    }
-                )
-            }
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp)
+    ) {
+        items(products) { product ->
+            ProductCard(
+                product = product,
+                onClick = {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(product.purchaseLink))
+                    context.startActivity(intent)
+                }
+            )
         }
-
-        Spacer(Modifier.height(24.dp))
     }
+
+    Spacer(Modifier.height(24.dp))
 }
+
+
 @Composable
-fun ProductCard(product: ClothingItem, onClick: () -> Unit) {
+fun ProductCard(product: ClothingItem, onClick: @Composable () -> Unit) {
     val context = LocalContext.current
 
     ElevatedCard(
@@ -195,13 +185,13 @@ fun ProductCard(product: ClothingItem, onClick: () -> Unit) {
 @Composable
 fun SearchContent(navController: NavHostController) {
     var searchQuery by remember { mutableStateOf("") }
+    val products = getProducts()
 
-    val categories = getSearchCategories()
-
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
-
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
@@ -211,11 +201,40 @@ fun SearchContent(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (searchQuery.isNotBlank()) {
-            SearchResults(searchQuery, categories, navController)
+        val filteredProducts = filterProductsByQuery(products, searchQuery)
+
+        if (filteredProducts.isEmpty() && searchQuery.isNotBlank()) {
+            ErrorScreen(
+                onBack = {
+                    searchQuery = ""
+                }
+            )
         } else {
-            CategorySelection(categories, navController)
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                contentPadding = PaddingValues(8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(filteredProducts) { product ->
+                    ProductCard(
+                        product = product,
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(product.purchaseLink))
+                            LocalContext.current.startActivity(intent)
+                        }
+                    )
+                }
+            }
         }
+    }
+}
+
+fun filterProductsByQuery(products: List<ClothingItem>, query: String): List<ClothingItem> {
+    return if (query.isBlank()) emptyList()
+    else products.filter {
+        it.name.contains(query, ignoreCase = true)
     }
 }
 
@@ -261,8 +280,7 @@ fun CategoryCard(category: Category, navController: NavHostController) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                // Navegar para a tela de categoria com base no nome da categoria
-                navController.navigate("category/${category.name}")
+                navController.navigate("category/${category.name.lowercase()}")
             },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -408,31 +426,6 @@ fun getProducts(): List<ClothingItem> {
             tags = listOf(StyleTag.URBAN, StyleTag.TREND, StyleTag.ALL),
             price = "R$ 28,90"
         )
-    )
-}
-
-fun getCategories(): List<TagTypeClothes> {
-    return listOf(
-        TagTypeClothes.SHORTS,
-        TagTypeClothes.T_SHIRTS,
-        TagTypeClothes.SHIRTS,
-        TagTypeClothes.PANTS,
-        TagTypeClothes.JACKETS,
-        TagTypeClothes.ACCESSORIES,
-        TagTypeClothes.SHOES
-    )
-}
-
-fun getSearchCategories(): List<Category> {
-    return listOf(
-        Category("Jaquetas", "https://img.icons8.com/?size=100&id=1186&format=png&color=000000",TagTypeClothes.JACKETS),
-        Category("Camisetas", "https://img.icons8.com/?size=100&id=105819&format=png&color=000000",TagTypeClothes.T_SHIRTS),
-        Category("Calças", "https://img.icons8.com/?size=100&id=1172&format=png&color=000000",TagTypeClothes.PANTS),
-        Category("Tênis", "https://img.icons8.com/?size=100&id=69628&format=png&color=000000",TagTypeClothes.SHOES),
-        Category("Acessórios", "https://img.icons8.com/?size=100&id=DMhtuPky5Yql&format=png&color=000000",TagTypeClothes.ACCESSORIES),
-        Category("Camisas", "https://img.icons8.com/?size=100&id=1169&format=png&color=000000",TagTypeClothes.SHIRTS),
-        Category("Shorts", "https://img.icons8.com/?size=100&id=1174&format=png&color=000000",TagTypeClothes.SHORTS),
-        // Add more categories here...
     )
 }
 

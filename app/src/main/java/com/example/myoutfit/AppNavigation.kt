@@ -5,8 +5,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -25,7 +27,7 @@ fun AppNavigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "login") {
         composable("login") {
             LoginScreen(
-                auth = auth,  // Passando o FirebaseAuth aqui
+                auth = auth,
                 authViewModel = authViewModel,
                 launcher = googleSignInLauncher,
                 navController = navController
@@ -34,7 +36,7 @@ fun AppNavigation(navController: NavHostController) {
 
         composable("register") {
             RegisterScreen(
-                auth = auth,  // Passando o FirebaseAuth aqui também
+                auth = auth,
                 navController = navController
             )
         }
@@ -43,24 +45,32 @@ fun AppNavigation(navController: NavHostController) {
             MyOutfitHomeScreen(navController)
         }
 
-        composable("category/{categoryName}") { backStackEntry ->
-            val categoryName = backStackEntry.arguments?.getString("categoryName") ?: ""
-            val categoryViewModel: CategoryViewModel = hiltViewModel()
+        // Rota para a tela de erro
+        composable("error") {
+            ErrorScreen(navController = navController)
+        }
 
-            // Converte o nome da categoria em um enum TagTypeClothes
+        composable(
+            route = "category/{categoryName}",
+            arguments = listOf(navArgument("categoryName") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val categoryName = backStackEntry.arguments?.getString("categoryName") ?: ""
             val categoryType = try {
-                TagTypeClothes.valueOf(categoryName)
+                TagTypeClothes.valueOf(categoryName.uppercase())
             } catch (e: IllegalArgumentException) {
-                // Caso o nome da categoria não seja válido, retorna uma categoria padrão
-                TagTypeClothes.SHORTS // ou outra categoria padrão
+                null
             }
 
-            CategoryScreen(
-                category = categoryName,
-                categoryType = categoryType,
-                viewModel = categoryViewModel,
-                navController = navController
-            )
+            // Se categoryType for nulo, redireciona para a tela de erro
+            if (categoryType == null) {
+                navController.navigate("error")
+            } else {
+                CategoryScreen(
+                    categoryType = categoryType,
+                    viewModel = hiltViewModel(),
+                    navController = navController
+                )
+            }
         }
     }
 }

@@ -2,7 +2,6 @@ package com.example.myoutfit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -25,7 +24,7 @@ class ClothingViewModel(
         }
     }
 
-    fun getByCategory(category: TagTypeClothes): Flow<List<ClothingItem>> {
-        return repository.getRoupasPorCategoria(category.name)
+    fun getProductsByCategory(category: TagTypeClothes): List<ClothingItem> {
+        return getProducts().filter { it.category == category }
     }
 }

@@ -20,7 +20,6 @@ import androidx.navigation.NavHostController
 
 @Composable
 fun CategoryScreen(
-    category: String,
     categoryType: TagTypeClothes,
     viewModel: CategoryViewModel,
     navController: NavHostController
@@ -29,8 +28,8 @@ fun CategoryScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.insertInitialData()
+    LaunchedEffect(categoryType) {
+        viewModel.insertInitialDataOnce()
         viewModel.loadProductsByCategory(categoryType.name)
     }
 
