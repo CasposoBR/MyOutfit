@@ -45,6 +45,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -179,12 +180,12 @@ fun CategorySection(products: List<ClothingItem>, navController: NavHostControll
 
 
 @Composable
-fun ProductCard(product: ClothingItem, onClick: @Composable () -> Unit) {
+fun ProductCard(product: ClothingItem, onClick: () -> Unit) {
     ElevatedCard(
         modifier = Modifier
             .width(160.dp)
             .height(240.dp)
-
+            .clickable { onClick() } // Lembre de tornar o card clicável
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -201,7 +202,15 @@ fun ProductCard(product: ClothingItem, onClick: @Composable () -> Unit) {
             Text(
                 text = product.name,
                 fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
+                maxLines = 1
+            )
+            Text(
+                text = product.price,
+                color = Color.Gray,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(bottom = 8.dp)
             )
         }
     }

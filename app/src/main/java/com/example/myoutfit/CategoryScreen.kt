@@ -23,16 +23,15 @@ fun CategoryScreen(
     categoryViewModel: CategoryViewModel,
     navController: NavHostController
 ) {
+    val context = LocalContext.current // 👈 PEGUE o contexto AQUI
     val products by categoryViewModel.products.collectAsState()
     val isLoading by categoryViewModel.isLoading.collectAsState()
     val error by categoryViewModel.error.collectAsState()
 
-    // Carregar os produtos da categoria
     LaunchedEffect(categoryName) {
         categoryViewModel.loadProductsByCategory(categoryName)
     }
 
-    // UI para exibir os produtos ou erros
     if (isLoading) {
         CircularProgressIndicator(modifier = Modifier.fillMaxSize())
     } else if (error != null) {
@@ -43,10 +42,8 @@ fun CategoryScreen(
                 ProductCard(
                     product = product,
                     onClick = {
-                        // Aqui estamos realizando a ação diretamente (navegação ou abertura de link)
-                        val context = LocalContext.current
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(product.purchaseLink))
-                        context.startActivity(intent) // Agora, a ação é realizada com o contexto adequado
+                        context.startActivity(intent) // ✅ CONTEXTO já estava salvo fora do lambda
                     }
                 )
             }
