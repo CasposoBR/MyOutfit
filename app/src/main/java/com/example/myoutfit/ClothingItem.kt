@@ -33,18 +33,18 @@
             ClothingItem(
                 name = "Short de linho bege",
                 price = "R$ 70,00",
-                imageUrl = "https://i.imgur.com/Ai3TAr2.jpg",
-                purchaseLink = "https://br.shein.com/Shorts-Masculino-Casual-S%C3%B3lido-C%C3%B3s-M%C3%A9dio-com-Cord%C3%A3o-p-19337025-cat-1972.html",
+                imageUrl = "https://img.ltwebstatic.com/images3_spmp/2023/06/14/16867490175d8a85151e143a2e0dd205ae7c49eacd.webp",
+                purchaseLink = "https://br.shein.com/Men-Shorts-p-17966745.html",
                     category = TagTypeClothes.SHORTS,
-                tags = listOf(StyleTag.SUMMER, StyleTag.TREND, StyleTag.ALL)
+                tags = listOf(StyleTag.SUMMER, StyleTag.ALL)
             ),
             ClothingItem(
                 name = "Camisa Social Preta",
                 price = "R$ 89,99",
-                imageUrl = "https://i.imgur.com/5T3aN4v.jpg",
-                purchaseLink = "https://br.shein.com/Camisa-Social-Preta-Masculina-p-12345678.html",
+                imageUrl = "https://img.ltwebstatic.com/images3_pi/2024/11/30/67/17329459297f7a89b48cdcd29be54bbd8cffa7a507.webp",
+                purchaseLink = "https://br.shein.com/Manfinity-Homme-Men-s-Autumn-Solid-Color-Single-Breasted-Casual-Long-Sleeve-Shirt-p-49174856.html",
                 category = TagTypeClothes.SHIRTS,
-                tags = listOf(StyleTag.FORMAL, StyleTag.TREND,StyleTag.OLDMONEY, StyleTag.ALL )
+                tags = listOf(StyleTag.FORMAL, StyleTag.OLDMONEY, StyleTag.ALL )
             ),
             ClothingItem(
                 name = "Tênis Branco Minimalista",

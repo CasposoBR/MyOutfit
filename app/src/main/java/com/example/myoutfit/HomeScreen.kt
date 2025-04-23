@@ -38,6 +38,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +53,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
@@ -100,8 +102,12 @@ enum class BottomNavItem(val label: String, val icon: ImageVector) {
 }
 
 @Composable
-fun HomeContent(navController: NavHostController) {
-    val products = getProducts()
+fun HomeContent(
+    navController: NavHostController,
+    viewModel: ClothingViewModel = hiltViewModel()
+) {
+    val allProducts by viewModel.allItems.collectAsState()
+
     val scrollState = rememberScrollState()
 
     Column(
@@ -112,23 +118,23 @@ fun HomeContent(navController: NavHostController) {
     ) {
         // Seções baseadas em estilo
         SectionTitle("Tendências")
-        CategorySection(products.filter { it.tags.contains(StyleTag.TREND) }, navController)
+        CategorySection(allProducts.filter { it.tags.contains(StyleTag.TREND) }, navController)
 
         SectionTitle("Para o seu verão")
-        CategorySection(products.filter { it.tags.contains(StyleTag.SUMMER) }, navController)
+        CategorySection(allProducts.filter { it.tags.contains(StyleTag.SUMMER) }, navController)
 
         SectionTitle("Para o seu inverno")
-        CategorySection(products.filter { it.tags.contains(StyleTag.WINTER) }, navController)
+        CategorySection(allProducts.filter { it.tags.contains(StyleTag.WINTER) }, navController)
 
         SectionTitle("Para o seu treino")
-        CategorySection(products.filter { it.tags.contains(StyleTag.WORKOUT) }, navController)
+        CategorySection(allProducts.filter { it.tags.contains(StyleTag.WORKOUT) }, navController)
 
         SectionTitle("Se destaque")
-        CategorySection(products.filter { it.tags.contains(StyleTag.FORMAL) }, navController)
+        CategorySection(allProducts.filter { it.tags.contains(StyleTag.FORMAL) }, navController)
 
         // Seções baseadas na categoria (ex: calças, camisetas...)
         TagTypeClothes.entries.forEach { category ->
-            val categoryProducts = products.filter { it.category == category }
+            val categoryProducts = allProducts.filter { it.category == category }
             if (categoryProducts.isNotEmpty()) {
                 SectionTitle(category.displayName)
                 CategorySection(categoryProducts, navController)
@@ -174,16 +180,11 @@ fun CategorySection(products: List<ClothingItem>, navController: NavHostControll
 
 @Composable
 fun ProductCard(product: ClothingItem, onClick: @Composable () -> Unit) {
-    val context = LocalContext.current
-
     ElevatedCard(
         modifier = Modifier
             .width(160.dp)
             .height(240.dp)
-            .clickable {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(product.purchaseLink))
-                context.startActivity(intent)
-            }
+
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -207,10 +208,14 @@ fun ProductCard(product: ClothingItem, onClick: @Composable () -> Unit) {
 }
 
 @Composable
-fun SearchContent(navController: NavHostController) {
+fun SearchContent(
+    navController: NavHostController,
+    viewModel: ClothingViewModel = hiltViewModel()
+) {
     var searchQuery by remember { mutableStateOf("") }
-    val products = getProducts()
-    var showContent by remember { mutableStateOf(true) }
+
+    // Pega os produtos filtrados em tempo real do ViewModel
+    val filteredProducts by viewModel.getProductsByQuery(searchQuery).collectAsState()
 
     Column(
         modifier = Modifier
@@ -219,19 +224,13 @@ fun SearchContent(navController: NavHostController) {
     ) {
         OutlinedTextField(
             value = searchQuery,
-            onValueChange = {
-                searchQuery = it
-                showContent = true // Reinicia a visibilidade ao digitar
-            },
+            onValueChange = { searchQuery = it },
             label = { Text("Pesquise uma peça...") },
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        val filteredProducts = filterProductsByQuery(products, searchQuery)
-
-        // Mostra os produtos filtrados
         AnimatedVisibility(
             visible = filteredProducts.isNotEmpty() || searchQuery.isBlank(),
             enter = fadeIn(),
@@ -245,31 +244,16 @@ fun SearchContent(navController: NavHostController) {
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(filteredProducts) { product ->
+                    val context = LocalContext.current
                     ProductCard(
                         product = product,
                         onClick = {
                             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(product.purchaseLink))
-                            LocalContext.current.startActivity(intent)
+                            context.startActivity(intent)
                         }
                     )
                 }
             }
-        }
-
-        // Tela de erro se não houver resultados
-        AnimatedVisibility(
-            visible = filteredProducts.isEmpty() && searchQuery.isNotBlank(),
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            ErrorScreen(
-                onBack = {
-                    // Resetando a pesquisa ao voltar
-                    showContent = false
-                    searchQuery = ""  // Limpa o campo de pesquisa
-                    showContent = true
-                }
-            )
         }
     }
 }
@@ -278,42 +262,6 @@ fun filterProductsByQuery(products: List<ClothingItem>, query: String): List<Clo
     return if (query.isBlank()) emptyList()
     else products.filter {
         it.name.contains(query, ignoreCase = true)
-    }
-}
-
-@Composable
-fun SearchResults(query: String, categories: List<Category>, navController: NavHostController) {
-    val filteredCategories = categories.filter {
-        it.name.contains(query, ignoreCase = true)
-    }
-
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(filteredCategories) { category ->
-            CategoryCard(category = category, navController = navController)
-        }
-    }
-}
-
-@Composable
-fun CategorySelection(categories: List<Category>, navController: NavHostController) {
-    Text("Escolha uma categoria:", textAlign = TextAlign.Center)
-
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(categories) { category ->
-            CategoryCard(category = category, navController = navController)
-        }
     }
 }
 
