@@ -25,7 +25,8 @@
         val imageUrl: String,
         val purchaseLink: String,
         val category: TagTypeClothes,
-        val tags: List<StyleTag>
+        val tags: List<StyleTag>,
+        val isFavorite: Boolean = false
     )
 
     object ClothingInventory {

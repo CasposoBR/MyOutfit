@@ -42,6 +42,7 @@ uiTestAndroid = "1.7.8"
 foundationAndroid = "1.7.0"
 litertSupportApi = "1.2.0"
 room = "2.7.0"
+animationCoreAndroid = "1.7.0"
 
 [libraries]
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
@@ -91,6 +92,7 @@ room-runtime-android = { group = "androidx.room", name = "room-runtime", version
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-compiler-ksp = { group = "androidx.room", name = "room.compiler.ksp", version.ref = "room" }
+animation-core-android = { group = "androidx.compose.animation", name = "animation-core-android", version.ref = "animationCoreAndroid" }
 
 [plugins]
 kotlin_kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

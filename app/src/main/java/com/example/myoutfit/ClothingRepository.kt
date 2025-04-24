@@ -19,7 +19,18 @@ class ClothingRepository @Inject constructor(private val dao: ClothingItemDao) {
             dao.insertAll(items)
         }
     }
+    fun removeFavorite(item: ClothingItem) {
+        // lógica para remover o item dos favoritos no banco de dados ou repositório
+    }
 
+    fun getFavorites(): Flow<List<ClothingItem>> = dao.getFavorites()
 
+    suspend fun toggleFavorite(item: ClothingItem) {
+        val updatedItem = item.copy(isFavorite = !item.isFavorite)
+        dao.updateItem(updatedItem)
+    }
+    suspend fun insertItems(items: List<ClothingItem>) {
+        dao.insertAll(items)
+    }
 
 }

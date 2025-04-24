@@ -34,4 +34,9 @@ class ClothingViewModel @Inject constructor(
             else items.filter { it.name.contains(query, ignoreCase = true) }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
     }
+    fun toggleFavorite(item: ClothingItem) {
+        val updated = item.copy(isFavorite = !item.isFavorite)
+        // Atualize o repositório ou a lista (dependendo da arquitetura)
+    }
+
 }

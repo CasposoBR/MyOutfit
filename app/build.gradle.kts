@@ -80,6 +80,7 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.foundation.layout.android)
+    implementation(libs.animation.core.android)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 

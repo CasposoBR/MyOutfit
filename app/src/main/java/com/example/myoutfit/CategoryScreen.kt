@@ -43,8 +43,9 @@ fun CategoryScreen(
                     product = product,
                     onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(product.purchaseLink))
-                        context.startActivity(intent) // ✅ CONTEXTO já estava salvo fora do lambda
-                    }
+                        context.startActivity(intent)
+                    },
+                    onToggleFavorite = { /* você pode deixar vazio por enquanto */ }
                 )
             }
         }

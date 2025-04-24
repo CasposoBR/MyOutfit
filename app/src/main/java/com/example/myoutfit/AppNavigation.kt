@@ -49,6 +49,11 @@ fun AppNavigation(navController: NavHostController,  auth: FirebaseAuth) {
             // Passando navController.popBackStack() como onBack
             ErrorScreen(onBack = { navController.popBackStack() })
         }
+        composable("favorites") {
+            FavoritesScreen(navController = navController)
+        }
+
+
 
         composable(
             route = "category/{categoryName}",
