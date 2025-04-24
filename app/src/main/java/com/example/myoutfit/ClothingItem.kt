@@ -60,7 +60,7 @@
                 name = "Jaqueta Preta PU",
                 purchaseLink = "https://br.shein.com/SWAVVY-Men-s-Fashionable-Daily-Casual-PU-Leather-Fitted-Long-Sleeve-Men-Jacket-Urban-Black-Jacket-For-Friends-Husband-Boyfriend-Gifts-p-41641968.html?mallCode=1&imgRatio=3-4",
                 category = TagTypeClothes.JACKETS,
-                tags = listOf(StyleTag.CASUAL, StyleTag.WINTER, StyleTag.URBAN, StyleTag.ALL),
+                tags = listOf(StyleTag.CASUAL, StyleTag.WINTER, StyleTag.ALL),
                 price = "R$ 199,99"
             ),
             ClothingItem(

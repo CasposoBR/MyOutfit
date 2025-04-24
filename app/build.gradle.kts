@@ -81,6 +81,9 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.foundation.layout.android)
     implementation(libs.animation.core.android)
+    implementation(libs.junit.ktx)
+    testImplementation(libs.testng)
+    androidTestImplementation(libs.testng)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
@@ -99,6 +102,11 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.material3)
     implementation(libs.compose.ui.tooling.preview)
+
+    //TESTES
+    implementation(platform(libs.kotlinx.coroutines.bom))
+    testImplementation(libs.kotlinx.coroutines.test)
+
 
     // Kotlin
     implementation(libs.kotlin.stdlib)

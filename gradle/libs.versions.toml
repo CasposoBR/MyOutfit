@@ -10,6 +10,8 @@ appcompat = "1.7.0"
 activityCompose = "1.10.1"
 composeBom = "2024.04.00"
 composeCompiler = "1.5.14"
+kotlinxCoroutinesBom = "1.7.3"
+kotlinxCoroutinesTest = "1.7.3"
 navigation-compose = "2.7.7"
 
 lifecycleRuntimeKtx = "2.8.7"
@@ -43,6 +45,8 @@ foundationAndroid = "1.7.0"
 litertSupportApi = "1.2.0"
 room = "2.7.0"
 animationCoreAndroid = "1.7.0"
+testng = "6.9.6"
+junitKtx = "1.2.1"
 
 [libraries]
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
@@ -59,6 +63,8 @@ compose_ui_tooling_preview = { group = "androidx.compose.ui", name = "ui-tooling
 compose_ui_test_junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "uiTestJunit4" }
 
 firebase-perf = { module = "com.google.firebase:firebase-perf" }
+kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinxCoroutinesBom" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 lifecycle_runtime_ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 lifecycle_viewmodel_compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 
@@ -93,6 +99,8 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-compiler-ksp = { group = "androidx.room", name = "room.compiler.ksp", version.ref = "room" }
 animation-core-android = { group = "androidx.compose.animation", name = "animation-core-android", version.ref = "animationCoreAndroid" }
+testng = { group = "org.testng", name = "testng", version.ref = "testng" }
+junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 
 [plugins]
 kotlin_kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

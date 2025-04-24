@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -214,7 +215,7 @@ fun ProductCard(
                 )
 
                 Text(
-                    text = "R$ ${product.price}",
+                    text = product.price,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.primary,
@@ -229,7 +230,7 @@ fun ProductCard(
                     .padding(4.dp)
             ) {
                 Icon(
-                    imageVector = if (product.isFavorite) Icons.Default.Star else Icons.Default.Star,
+                    imageVector = if (product.isFavorite) Icons.Filled.Star else Icons.Outlined.Star,
                     contentDescription = "Favoritar",
                     tint = if (product.isFavorite) Color.Yellow else Color.Gray
                 )

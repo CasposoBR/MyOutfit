@@ -14,7 +14,7 @@ interface ClothingItemDao {
     fun getAllItems(): Flow<List<ClothingItem>>
 
     @Query("SELECT * FROM clothing_item WHERE category = :category")
-    fun getItemsByCategory(category: String): Flow<List<ClothingItem>>
+    fun getItemsByCategory(category: TagTypeClothes): Flow<List<ClothingItem>>
 
     @Query("SELECT * FROM clothing_item WHERE isFavorite = 1")
     fun getAllFavorites(): Flow<List<ClothingItem>>

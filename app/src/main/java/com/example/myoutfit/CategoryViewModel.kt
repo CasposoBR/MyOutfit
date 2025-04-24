@@ -26,7 +26,7 @@ class CategoryViewModel @Inject constructor(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
-    fun loadProductsByCategory(category: String) {
+    fun loadProductsByCategory(category: TagTypeClothes) {
         Log.d("CategoryDebug", "Carregando produtos da categoria: $category")
         viewModelScope.launch {
             _isLoading.value = true
