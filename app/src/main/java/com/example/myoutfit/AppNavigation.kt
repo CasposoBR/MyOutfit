@@ -72,7 +72,7 @@ fun AppNavigation(navController: NavHostController,  auth: FirebaseAuth) {
             } else {
                 // Passando corretamente o categoryType, viewModel e navController para CategoryScreen
                 CategoryScreen(
-                    categoryName = categoryName,  // Passando a categoria para a tela de categoria
+                    categoryName = categoryType,  // Passando a categoria para a tela de categoria
                     categoryViewModel = hiltViewModel(), // Passando o ViewModel
                     navController = navController // Passando o navController para navegar
                 )
