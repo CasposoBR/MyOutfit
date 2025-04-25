@@ -19,7 +19,7 @@ import androidx.navigation.NavHostController
 
 @Composable
 fun CategoryScreen(
-    categoryName: String,
+    categoryName: TagTypeClothes,
     categoryViewModel: CategoryViewModel,
     navController: NavHostController
 ) {

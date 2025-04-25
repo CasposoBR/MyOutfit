@@ -1,7 +1,5 @@
 package com.example.myoutfit
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before
@@ -35,33 +33,11 @@ class ClothingRepositoryTest {
 
         repository.toggleFavorite(item)
 
-        val updated = fakeDao.updatedItem
+        val updated = fakeDao.lastUpdatedItem
         assertNotNull(updated)
         assertTrue(updated!!.isFavorite)
     }
-
-    class FakeClothingItemDao : ClothingItemDao {
-        var updatedItem: ClothingItem? = null
-        private val items = mutableListOf<ClothingItem>()
-
-        override fun getAllItems(): Flow<List<ClothingItem>> = flowOf(items)
-        override fun getItemsByCategory(category: TagTypeClothes): Flow<List<ClothingItem>> =
-            flowOf(items.filter { it.category == category })
-        override fun getFavorites(): Flow<List<ClothingItem>> = flowOf(items.filter { it.isFavorite })
-        override fun getAllFavorites(): Flow<List<ClothingItem>> = getFavorites()
-        override suspend fun insertAll(items: List<ClothingItem>) {
-            this.items.clear()
-            this.items.addAll(items)
-        }
-
-        override suspend fun updateItem(item: ClothingItem) {
-            updatedItem = item
-        }
-
-        override suspend fun getAllItemsOnce(): List<ClothingItem> = items
-    }
-
-
-
-
 }
+
+
+

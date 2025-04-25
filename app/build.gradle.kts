@@ -90,7 +90,7 @@ dependencies {
     // Room
     implementation(libs.room.runtime.android)  // Room Runtime
     implementation(libs.room.ktx)              // Room KTX
-    ksp(libs.room.compiler.v250)            // 'room-compiler' para geração de implementações
+    ksp(libs.room.compiler)            // 'room-compiler' para geração de implementações
 
     // Compose + Material3
     implementation(libs.coil.compose)
@@ -104,9 +104,10 @@ dependencies {
     implementation(libs.compose.ui.tooling.preview)
 
     //TESTES
-    implementation(platform(libs.kotlinx.coroutines.bom))
+    // Coroutines para testes
+    testImplementation(platform(libs.kotlinx.coroutines.bom)) // <- BOM dentro de testImplementation!
     testImplementation(libs.kotlinx.coroutines.test)
-
+    testImplementation(libs.junit)
 
     // Kotlin
     implementation(libs.kotlin.stdlib)

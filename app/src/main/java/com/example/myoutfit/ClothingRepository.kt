@@ -3,7 +3,7 @@ package com.example.myoutfit
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-open class ClothingRepository @Inject constructor(private val dao: ClothingItemDao) {
+open class ClothingRepository @Inject constructor(val dao: ClothingItemDao) {
 
     fun getRoupasPorCategoria(category: TagTypeClothes): Flow<List<ClothingItem>> =
         dao.getItemsByCategory(category)

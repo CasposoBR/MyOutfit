@@ -1,110 +1,129 @@
 [versions]
-coilCompose = "2.5.0"
-coilComposeVersion = "2.4.0"
-hiltNavigationCompose = "1.1libs.hilt.lifecycle.viewmodel"
+# Kotlin / Compose
 kotlin = "2.1.0"
-agp = "8.6.0"
-
-coreKtx = "1.15.0"
-appcompat = "1.7.0"
-activityCompose = "1.10.1"
+kotlinStdlib = "2.1.10"
 composeBom = "2024.04.00"
 composeCompiler = "1.5.14"
-kotlinxCoroutinesBom = "1.7.3"
-kotlinxCoroutinesTest = "1.7.3"
-navigation-compose = "2.7.7"
+material3 = "1.3.1"
+activityCompose = "1.10.1"
+coreKtx = "1.15.0"
+appcompat = "1.7.0"
+ui = "1.7.8"
+uiTooling = "1.7.8"
+toolingPreview = "1.5.0"
+foundationLayoutAndroid = "1.7.0"
+foundationAndroid = "1.7.0"
+animationCoreAndroid = "1.7.0"
 
+# Navigation
+navigationCompose = "2.7.7"
+hiltNavigationCompose = "1.2.0"
+
+# Lifecycle
 lifecycleRuntimeKtx = "2.8.7"
 lifecycleViewmodelCompose = "2.8.7"
-material3 = "1.3.1"
-credentials = "1.5.0"
 
+# Hilt
 hiltAndroidVersion = "2.56.1"
 hiltCompilerVersion = "2.56.1"
 
+# Firebase / Google
 firebaseBom = "33.12.0"
 firebase-auth = "22.3.1"
 firebase-auth-ktx = "22.3.1"
 playServicesAuth = "21.3.0"
+credentials = "1.5.0"
 
+# Room
+room = "2.7.0"
+roomCompiler = "2.5.0"
+
+# Coil
+coilCompose = "2.5.0"
+
+# Coroutines
+kotlinxCoroutinesBom = "1.7.3"
+kotlinxCoroutinesTest = "1.7.3"
+
+# Testes
 junit = "4.13.2"
 androidxJunit = "1.1.5"
 espressoCore = "3.6.1"
-
-roomCompiler = "2.5.0"
-ui = "1.7.8"
-uiTooling = "1.7.8"
 uiTestJunit4 = "1.7.8"
-toolingPreview = "1.5.0"
-
-
-kotlinStdlib = "2.1.10"
-foundationLayoutAndroid = "1.7.0"
 uiTestAndroid = "1.7.8"
-foundationAndroid = "1.7.0"
-litertSupportApi = "1.2.0"
-room = "2.7.0"
-animationCoreAndroid = "1.7.0"
 testng = "6.9.6"
 junitKtx = "1.2.1"
 
+# Outros
+litertSupportApi = "1.2.0"
+agp = "8.6.0"
+
 [libraries]
-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
-coil-compose-v240 = { module = "io.coil-kt:coil-compose", version.ref = "coilComposeVersion" }
-core_ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-activity_compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-
-
+# Compose / UI
 compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 compose_ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 compose_ui_tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 compose_ui_tooling_preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "toolingPreview" }
 compose_ui_test_junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "uiTestJunit4" }
+material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+activity_compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
+foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
+animation-core-android = { group = "androidx.compose.animation", name = "animation-core-android", version.ref = "animationCoreAndroid" }
 
-firebase-perf = { module = "com.google.firebase:firebase-perf" }
-kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinxCoroutinesBom" }
-kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+# AndroidX
+core_ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+
+# Lifecycle
 lifecycle_runtime_ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 lifecycle_viewmodel_compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 
-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+# Navigation
+navigation_compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+hilt_navigation_compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
+# Hilt
 hilt_android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidVersion" }
 hilt_compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltCompilerVersion" }
-hilt_navigation_compose = { module = "androidx.hilt:hilt-navigation-compose", version = "1.2.0" }
 
+# Firebase / Google
 firebase_bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase_auth = { module = "com.google.firebase:firebase-auth" }
 firebase_auth_ktx = { module = "com.google.firebase:firebase-auth-ktx" }
 firebase_analytics = { module = "com.google.firebase:firebase-analytics" }
-
+firebase_perf = { module = "com.google.firebase:firebase-perf" }
 play_services_auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx_junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxJunit" }
-espresso_core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+# Coil
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 
-navigation_compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
-kotlin_stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlinStdlib" }
-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
-room-compiler-v250 = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version.ref = "uiTestAndroid" }
-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
-litert-support-api = { group = "com.google.ai.edge.litert", name = "litert-support-api", version.ref = "litertSupportApi" }
+# Room
 room-common-jvm = { group = "androidx.room", name = "room-common", version.ref = "room" }
 room-runtime-android = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-room-compiler-ksp = { group = "androidx.room", name = "room.compiler.ksp", version.ref = "room" }
-animation-core-android = { group = "androidx.compose.animation", name = "animation-core-android", version.ref = "animationCoreAndroid" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
+
+# Coroutines
+kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinxCoroutinesBom" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+
+# Testes
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx_junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxJunit" }
+espresso_core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version.ref = "uiTestAndroid" }
 testng = { group = "org.testng", name = "testng", version.ref = "testng" }
 junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 
+# Outros
+litert-support-api = { group = "com.google.ai.edge.litert", name = "litert-support-api", version.ref = "litertSupportApi" }
+kotlin_stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlinStdlib" }
+
 [plugins]
-kotlin_kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 android_application = { id = "com.android.application", version.ref = "agp" }
 kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin_kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
