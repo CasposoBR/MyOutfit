@@ -103,11 +103,15 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.compose.ui.tooling.preview)
 
+    //Coroutines
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
     //TESTES
     // Coroutines para testes
     testImplementation(platform(libs.kotlinx.coroutines.bom)) // <- BOM dentro de testImplementation!
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
+    testImplementation(libs.core.testing)
     androidTestImplementation(libs.room.testing)
     androidTestImplementation(libs.runner)
     androidTestImplementation(libs.espresso.core.v351)
