@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ClothingItemDao {
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(item: ClothingItem)
+
     @Query("SELECT * FROM clothing_item")
     fun getAllItems(): Flow<List<ClothingItem>>
 

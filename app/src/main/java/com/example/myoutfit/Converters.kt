@@ -18,4 +18,7 @@ class Converters {
     @TypeConverter
     fun toStyleTagList(data: String): List<StyleTag> =
         if (data.isBlank()) emptyList() else data.split(",").map { StyleTag.valueOf(it) }
+
+
+
 }

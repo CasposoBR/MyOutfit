@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.flowOf
 class FakeClothingItemDao : ClothingItemDao {
     private val items = mutableListOf<ClothingItem>()
     var lastUpdatedItem: ClothingItem? = null
+    override suspend fun insert(item: ClothingItem) {
+
+    }
 
     override fun getAllItems(): Flow<List<ClothingItem>> = flowOf(items)
 

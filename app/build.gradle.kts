@@ -108,7 +108,10 @@ dependencies {
     testImplementation(platform(libs.kotlinx.coroutines.bom)) // <- BOM dentro de testImplementation!
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
-
+    androidTestImplementation(libs.room.testing)
+    androidTestImplementation(libs.runner)
+    androidTestImplementation(libs.espresso.core.v351)
+    androidTestImplementation(libs.junit.v121)
     // Kotlin
     implementation(libs.kotlin.stdlib)
 }

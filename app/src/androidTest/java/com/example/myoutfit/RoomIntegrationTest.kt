@@ -21,8 +21,7 @@ class RoomIntegrationTest {
     fun setup() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
-            .allowMainThreadQueries() // apenas para teste
-            .build()
+            .build() // Removido allowMainThreadQueries()
         dao = db.clothingItemDao()
     }
 
@@ -34,7 +33,6 @@ class RoomIntegrationTest {
     @Test
     fun insertAndGetItems() = runBlocking {
         val item = ClothingItem(
-            id = 1,
             name = "Jaqueta Preta PU",
             price = "199.99",
             imageUrl = "url",
@@ -44,10 +42,10 @@ class RoomIntegrationTest {
             isFavorite = false
         )
 
-        dao.insertAll(listOf(item))
+        dao.insert(item)
 
         val result = dao.getAllItemsOnce()
         assertEquals(1, result.size)
-        assertEquals("Camiseta", result[0].name)
+        assertEquals("Jaqueta Preta PU", result[0].name) // Corrigido o nome
     }
 }
