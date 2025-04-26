@@ -1,4 +1,4 @@
-package com.example.myoutfit
+package com.example.myoutfit.Firebase
 
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module

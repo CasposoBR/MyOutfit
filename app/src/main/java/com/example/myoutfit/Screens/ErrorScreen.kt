@@ -1,4 +1,4 @@
-package com.example.myoutfit
+package com.example.myoutfit.Screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -1,5 +1,9 @@
 package com.example.myoutfit
 
+import com.example.myoutfit.Database.ClothingRepository
+import com.example.myoutfit.Database.ClothingItem
+import com.example.myoutfit.Database.StyleTag
+import com.example.myoutfit.Database.TagTypeClothes
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before

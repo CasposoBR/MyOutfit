@@ -1,6 +1,5 @@
-package com.example.myoutfit
+package com.example.myoutfit.Activitys
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -10,6 +9,7 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.navigation.compose.rememberNavController
+import com.example.myoutfit.Firebase.AuthViewModel
 import com.example.myoutfit.ui.theme.MyOutfitTheme
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint

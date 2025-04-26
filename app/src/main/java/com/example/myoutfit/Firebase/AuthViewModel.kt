@@ -1,4 +1,4 @@
-package com.example.myoutfit
+package com.example.myoutfit.Firebase
 
 import android.content.Context
 import android.content.Intent

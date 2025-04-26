@@ -1,4 +1,4 @@
-    package com.example.myoutfit
+    package com.example.myoutfit.Database
 
     import androidx.room.Entity
     import androidx.room.PrimaryKey
@@ -148,7 +148,7 @@
                 name = "Calça Jeans Preta Bag Balão",
                 purchaseLink = "https://br.shein.com/Bag-Balloon-Jeans-Wide-Straight-Cut-Carpenter-UNISEX-p-61215286.html",
                 category = TagTypeClothes.PANTS,
-                tags = listOf(StyleTag.CASUAL, StyleTag.URBAN, StyleTag.CLASSIC,StyleTag.ALL),
+                tags = listOf(StyleTag.CASUAL, StyleTag.URBAN, StyleTag.CLASSIC, StyleTag.ALL),
                 price = "R$ 102,88"
             ),
             ClothingItem(

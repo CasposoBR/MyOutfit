@@ -1,4 +1,4 @@
-package com.example.myoutfit
+package com.example.myoutfit.Screens
 
     import android.util.Log
     import androidx.activity.result.ActivityResultLauncher
@@ -28,6 +28,7 @@ package com.example.myoutfit
     import androidx.compose.ui.text.input.PasswordVisualTransformation
     import androidx.compose.ui.unit.dp
     import androidx.navigation.NavHostController
+    import com.example.myoutfit.Firebase.AuthViewModel
     import com.google.firebase.auth.FirebaseAuth
     import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
     import kotlinx.coroutines.launch

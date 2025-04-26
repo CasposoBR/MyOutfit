@@ -1,5 +1,5 @@
 
-package com.example.myoutfit
+package com.example.myoutfit.Screens
 
 import android.content.Intent
 import android.net.Uri
@@ -60,6 +60,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.myoutfit.Database.ClothingItem
+import com.example.myoutfit.Database.StyleTag
+import com.example.myoutfit.ViewlModels.ClothingViewModel
+import com.example.myoutfit.ViewlModels.FavoritesViewModel
 
 @Composable
 fun MyOutfitHomeScreen(navController: NavHostController) {

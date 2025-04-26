@@ -1,4 +1,4 @@
-package com.example.myoutfit
+package com.example.myoutfit.Database
 
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

@@ -4,6 +4,11 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.myoutfit.Database.AppDatabase
+import com.example.myoutfit.Database.ClothingItemDao
+import com.example.myoutfit.Database.ClothingItem
+import com.example.myoutfit.Database.StyleTag
+import com.example.myoutfit.Database.TagTypeClothes
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.After

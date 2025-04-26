@@ -1,4 +1,4 @@
-package com.example.myoutfit
+package com.example.myoutfit.Screens
 
 import android.content.Intent
 import android.net.Uri
@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import com.example.myoutfit.Database.TagTypeClothes
+import com.example.myoutfit.ViewlModels.CategoryViewModel
 
 
 @Composable

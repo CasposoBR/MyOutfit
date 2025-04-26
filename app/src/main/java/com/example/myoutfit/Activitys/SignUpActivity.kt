@@ -1,4 +1,4 @@
-package com.example.myoutfit
+package com.example.myoutfit.Activitys
 
 import android.content.Intent
 import android.os.Bundle
@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.example.myoutfit.Firebase.AuthViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -1,8 +1,11 @@
-package com.example.myoutfit
+package com.example.myoutfit.ViewlModels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myoutfit.Database.ClothingItem
+import com.example.myoutfit.Database.ClothingRepository
+import com.example.myoutfit.Database.TagTypeClothes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

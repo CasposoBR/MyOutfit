@@ -2,6 +2,10 @@ package com.example.myoutfit
 
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.myoutfit.Database.ClothingItem
+import com.example.myoutfit.Database.StyleTag
+import com.example.myoutfit.Database.TagTypeClothes
+import com.example.myoutfit.ViewlModels.ClothingViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher

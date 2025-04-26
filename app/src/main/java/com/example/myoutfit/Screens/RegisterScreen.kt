@@ -1,4 +1,4 @@
-package com.example.myoutfit
+package com.example.myoutfit.Screens
 
 import android.util.Patterns
 import androidx.compose.foundation.layout.Box

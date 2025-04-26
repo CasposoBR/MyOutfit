@@ -1,4 +1,4 @@
-package com.example.myoutfit
+package com.example.myoutfit.Activitys
 
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
@@ -9,6 +9,14 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.myoutfit.Firebase.AuthViewModel
+import com.example.myoutfit.Screens.CategoryScreen
+import com.example.myoutfit.Screens.ErrorScreen
+import com.example.myoutfit.Screens.FavoritesScreen
+import com.example.myoutfit.Screens.LoginScreen
+import com.example.myoutfit.Screens.MyOutfitHomeScreen
+import com.example.myoutfit.Screens.RegisterScreen
+import com.example.myoutfit.Database.TagTypeClothes
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable

@@ -1,4 +1,4 @@
-package com.example.myoutfit
+package com.example.myoutfit.Screens
 
 import android.content.Intent
 import android.net.Uri
@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.compose.foundation.lazy.grid.items
+import com.example.myoutfit.ViewlModels.FavoritesViewModel
 
 @Composable
 fun FavoritesScreen(
