@@ -1,7 +1,7 @@
 package com.example.myoutfit
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -12,15 +12,9 @@ import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun AppNavigation(navController: NavHostController,  auth: FirebaseAuth) {
+fun AppNavigation(navController: NavHostController,  auth: FirebaseAuth, googleSignInLauncher: ActivityResultLauncher<IntentSenderRequest>) {
     val auth = FirebaseAuth.getInstance()
-
     // Launcher para o login com Google
-    val googleSignInLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        // TODO: Tratar resultado do login com Google aqui, usando authViewModel.handleGoogleSignInResult(result)
-    }
 
     val authViewModel: AuthViewModel = hiltViewModel()
 

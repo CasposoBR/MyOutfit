@@ -37,7 +37,7 @@ package com.example.myoutfit
 fun LoginScreen(
     auth: FirebaseAuth,
     authViewModel: AuthViewModel,
-    launcher: ActivityResultLauncher<IntentSenderRequest>,
+    launcher: ActivityResultLauncher<IntentSenderRequest>, // Alterado para ActivityResultLauncher<IntentSenderRequest>
     navController: NavHostController
 ) {
 
@@ -123,7 +123,7 @@ fun LoginScreen(
                             if (intent != null) {
                                 val intentSenderRequest =
                                     IntentSenderRequest.Builder(intent.extras?.get("android.intent.extra.INTENT") as android.content.IntentSender).build()
-                                launcher.launch(intentSenderRequest)
+                                launcher.launch(intentSenderRequest) // Agora está correto
                             } else {
                                 Log.e("LoginScreen", "Falha ao obter o intent de login do Google")
                                 // Mostrar mensagem de erro para o usuário

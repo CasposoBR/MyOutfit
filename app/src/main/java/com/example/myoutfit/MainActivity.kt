@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.navigation.compose.rememberNavController
@@ -17,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
 
-    private lateinit var googleSignInLauncher: ActivityResultLauncher<Intent>
+    private lateinit var googleSignInLauncher: ActivityResultLauncher<IntentSenderRequest>
     private val authViewModel: AuthViewModel by viewModels()
     private val firebaseAuth = FirebaseAuth.getInstance() // 🔹 Aqui pegamos o auth
 
@@ -29,7 +30,9 @@ class MainActivity : ComponentActivity() {
 
 
         // Registro do Launcher para o resultado do login com Google
-        googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        googleSignInLauncher = registerForActivityResult(
+            ActivityResultContracts.StartIntentSenderForResult()
+        ) { result ->
             val data = result.data
             authViewModel.handleGoogleSignInResult(data) { success, message ->
                 if (success) {
@@ -47,7 +50,8 @@ class MainActivity : ComponentActivity() {
                 // Passando o navController e o authViewModel para o AppNavigation
                 AppNavigation(
                     navController = navController,
-                    auth = firebaseAuth // Passando o FirebaseAuth
+                    auth = firebaseAuth, // Passando o FirebaseAuth
+                    googleSignInLauncher = googleSignInLauncher
                 )
             }
         }
