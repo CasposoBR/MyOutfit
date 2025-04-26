@@ -32,5 +32,7 @@ open class ClothingRepository @Inject constructor(val dao: ClothingItemDao) {
     suspend fun insertItems(items: List<ClothingItem>) {
         dao.insertAll(items)
     }
-
+    suspend fun updateItem(item: ClothingItem) {
+        dao.updateItem(item)
+    }
 }

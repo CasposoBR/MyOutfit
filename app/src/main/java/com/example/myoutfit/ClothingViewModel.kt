@@ -35,8 +35,9 @@ class ClothingViewModel @Inject constructor(
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
     }
     fun toggleFavorite(item: ClothingItem) {
-        val updated = item.copy(isFavorite = !item.isFavorite)
-        // Atualize o repositório ou a lista (dependendo da arquitetura)
+        viewModelScope.launch {
+            val updated = item.copy(isFavorite = !item.isFavorite)
+            repository.updateItem(updated)
+        }
     }
-
-}
+    }
