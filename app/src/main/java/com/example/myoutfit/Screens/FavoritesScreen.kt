@@ -2,7 +2,9 @@ package com.example.myoutfit.Screens
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
@@ -13,6 +15,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.sp
 import com.example.myoutfit.ViewlModels.FavoritesViewModel
 
 @Composable
@@ -21,11 +27,18 @@ fun FavoritesScreen(
     viewModel: FavoritesViewModel = hiltViewModel()
 ) {
     val favorites by viewModel.favoriteItems.collectAsState()
-    val context = LocalContext.current // ✅ Obtenha o contexto AQUI, fora da lambda
+    val context = LocalContext.current
 
     if (favorites.isEmpty()) {
-        FavoritesContent(navController)
+        // Exibir a mensagem "Seus favoritos aparecerão aqui"
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("Seus favoritos aparecerão aqui", fontSize = 16.sp)
+        }
     } else {
+        // Exibir a grade de favoritos
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             contentPadding = PaddingValues(8.dp)
@@ -34,7 +47,6 @@ fun FavoritesScreen(
                 ProductCard(
                     product = item,
                     onClick = {
-                        // Usando o contexto que já foi obtido fora da lambda
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.purchaseLink))
                         context.startActivity(intent)
                     },

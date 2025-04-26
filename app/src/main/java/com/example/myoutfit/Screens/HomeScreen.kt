@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -63,7 +62,6 @@ import coil.compose.AsyncImage
 import com.example.myoutfit.Database.ClothingItem
 import com.example.myoutfit.Database.StyleTag
 import com.example.myoutfit.ViewlModels.ClothingViewModel
-import com.example.myoutfit.ViewlModels.FavoritesViewModel
 
 @Composable
 fun MyOutfitHomeScreen(navController: NavHostController) {
@@ -78,7 +76,7 @@ fun MyOutfitHomeScreen(navController: NavHostController) {
             when (selectedIndex) {
                 0 -> HomeContent(navController)
                 1 -> SearchContent(navController)
-                2 -> FavoritesContent(navController)
+                2 -> FavoritesScreen(navController)
             }
         }
     }
@@ -290,43 +288,6 @@ fun SearchContent(
                         }
                     )
                 }
-            }
-        }
-    }
-}
-
-
-@Composable
-fun FavoritesContent(
-    navController: NavHostController,
-    viewModel: FavoritesViewModel = hiltViewModel()
-) {
-    val favorites by viewModel.favoriteItems.collectAsState()
-    val context = LocalContext.current // ✅ PEGAR O CONTEXTO AQUI
-
-    if (favorites.isEmpty()) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Seus favoritos aparecerão aqui", fontSize = 16.sp)
-        }
-    } else {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(8.dp)
-        ) {
-            items(favorites) { product ->
-                ProductCard(
-                    product = product,
-                    onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(product.purchaseLink))
-                        context.startActivity(intent)
-                    },
-                    onToggleFavorite = {
-                        viewModel.removeFavorite(product)
-                    }
-                )
             }
         }
     }
