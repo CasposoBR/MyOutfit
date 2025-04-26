@@ -84,6 +84,7 @@ dependencies {
     implementation(libs.junit.ktx)
     testImplementation(libs.testng)
     androidTestImplementation(libs.testng)
+    androidTestImplementation(libs.core.testing)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
