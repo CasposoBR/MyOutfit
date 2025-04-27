@@ -20,10 +20,8 @@ import com.example.myoutfit.Database.TagTypeClothes
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun AppNavigation(navController: NavHostController,  auth: FirebaseAuth, googleSignInLauncher: ActivityResultLauncher<IntentSenderRequest>) {
-    val auth = FirebaseAuth.getInstance()
-    // Launcher para o login com Google
-
+fun AppNavigation(navController: NavHostController, auth: FirebaseAuth, googleSignInLauncher: ActivityResultLauncher<IntentSenderRequest>) {
+    val auth = FirebaseAuth.getInstance()  // Inicialize o FirebaseAuth
     val authViewModel: AuthViewModel = hiltViewModel()
 
     NavHost(navController = navController, startDestination = "login") {
@@ -54,8 +52,6 @@ fun AppNavigation(navController: NavHostController,  auth: FirebaseAuth, googleS
         composable("favorites") {
             FavoritesScreen(navController = navController)
         }
-
-
 
         composable(
             route = "category/{categoryName}",

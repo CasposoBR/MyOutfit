@@ -52,7 +52,6 @@ fun LoginScreen(
     launcher: ActivityResultLauncher<IntentSenderRequest>,
     navController: NavHostController
 ) {
-
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -79,7 +78,7 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp) // Espaçamento entre os elementos
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 // Campo de email
                 OutlinedTextField(
@@ -138,8 +137,8 @@ fun LoginScreen(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary, // Cor de destaque
-                        contentColor = MaterialTheme.colorScheme.onPrimary // Texto claro
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
                     Text("INICIAR SESSÃO")
@@ -147,6 +146,7 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Botão de navegação para o cadastro
                 TextButton(
                     onClick = {
                         navController.navigate("register")
@@ -160,13 +160,12 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-            //campo de cadastro
+                // Botão de login com Google
                 TextButton(
                     onClick = {
-                        authViewModel.getGoogleSignInIntent { intent ->
-                            if (intent != null) {
-                                val intentSenderRequest =
-                                    IntentSenderRequest.Builder(intent.extras?.get("android.intent.extra.INTENT") as android.content.IntentSender).build()
+                        authViewModel.getGoogleSignInIntent { intentSender ->
+                            if (intentSender != null) {
+                                val intentSenderRequest = IntentSenderRequest.Builder(intentSender).build()
                                 launcher.launch(intentSenderRequest)
                             } else {
                                 Log.e("LoginScreen", "Falha ao obter o intent de login do Google")
@@ -176,7 +175,7 @@ fun LoginScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.8f)
                         .wrapContentWidth(Alignment.CenterHorizontally)
-                        .padding(8.dp), // Adicionado padding ao Button
+                        .padding(8.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.surface,
                         contentColor = MaterialTheme.colorScheme.onSurface
@@ -184,27 +183,25 @@ fun LoginScreen(
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center, // Centraliza o conteúdo horizontalmente
-                        modifier = Modifier.fillMaxWidth() // Preenche a largura do botão
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.logoicongoogle),
                             contentDescription = "Login com Google",
-                            modifier = Modifier.size(48.dp) // Ícone maior
+                            modifier = Modifier.size(48.dp)
                         )
                         Spacer(modifier = Modifier.size(8.dp))
                         Text("Entrar com o Google")
                     }
                 }
 
-
-
-                    // Exibe mensagem de erro se houver
-                    errorMessage?.let {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(text = it, color = MaterialTheme.colorScheme.error)
-                    }
+                // Exibe mensagem de erro se houver
+                errorMessage?.let {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = it, color = MaterialTheme.colorScheme.error)
                 }
             }
         }
     }
+}

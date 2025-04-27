@@ -38,12 +38,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 
     buildFeatures {
@@ -87,6 +87,7 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.core.ktx)
     implementation(libs.core.ktx)
+    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.testng)
     androidTestImplementation(libs.testng)
     androidTestImplementation(libs.core.testing)
@@ -118,6 +119,9 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
     testImplementation(libs.core.testing)
+    testImplementation(libs.mockito.kotlin.v540)
+    androidTestImplementation(libs.mockito.android)
+    androidTestImplementation(libs.truth)
     androidTestImplementation(libs.room.testing)
     androidTestImplementation(libs.runner)
     androidTestImplementation(libs.espresso.core.v351)

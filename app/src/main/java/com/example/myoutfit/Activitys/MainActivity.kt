@@ -17,7 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-
     private lateinit var googleSignInLauncher: ActivityResultLauncher<IntentSenderRequest>
     private val authViewModel: AuthViewModel by viewModels()
     private val firebaseAuth = FirebaseAuth.getInstance() // 🔹 Aqui pegamos o auth
@@ -28,12 +27,12 @@ class MainActivity : ComponentActivity() {
         // Configuração do SignIn
         authViewModel.configureGoogleSignIn(this)
 
-
         // Registro do Launcher para o resultado do login com Google
         googleSignInLauncher = registerForActivityResult(
             ActivityResultContracts.StartIntentSenderForResult()
         ) { result ->
             val data = result.data
+            // Chame handleGoogleSignInResult sem um callback, ou com callback dependendo da assinatura
             authViewModel.handleGoogleSignInResult(data) { success, message ->
                 if (success) {
                     Toast.makeText(this, "Login com Google feito com sucesso", Toast.LENGTH_SHORT).show()
