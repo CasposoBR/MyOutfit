@@ -1,5 +1,6 @@
 package com.example.myoutfit.Firebase
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -12,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
@@ -45,17 +47,17 @@ class AuthViewModel @Inject constructor(
             }
     }
 
-    fun handleGoogleSignInResult(data: Intent?, callback: (Boolean, String?) -> Unit) {
+    fun handleGoogleSignInResult(activity: Activity, data: Intent?, callback: (Boolean, String?) -> Unit) {
         if (data == null) {
             callback(false, "Intent de login do Google é nulo")
             return
         }
         try {
-            val result = Identity.getSignInClient(data.extras?.get("android.intent.extra.INTENT") as Context).getSignInCredentialFromIntent(data)
-            val idToken = result.googleIdToken
+            val credential = Identity.getSignInClient(activity).getSignInCredentialFromIntent(data)
+            val idToken = credential.googleIdToken
             if (!idToken.isNullOrEmpty()) {
-                val credential = GoogleAuthProvider.getCredential(idToken, null)
-                firebaseAuth.signInWithCredential(credential)
+                val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
+                firebaseAuth.signInWithCredential(firebaseCredential)
                     .addOnCompleteListener { task ->
                         callback(task.isSuccessful, task.exception?.localizedMessage)
                     }

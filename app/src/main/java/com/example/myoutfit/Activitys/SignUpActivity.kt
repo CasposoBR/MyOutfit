@@ -38,7 +38,7 @@ class SignUpActivity : ComponentActivity() {
         ) { result ->
             if (result.resultCode == RESULT_OK) {
                 val data: Intent? = result.data
-                authViewModel.handleGoogleSignInResult(data) { success, message ->
+                authViewModel.handleGoogleSignInResult(this,data) { success, message ->
                     if (success) {
                         Log.d("SignUpActivity", "Cadastro com Google bem-sucedido!")
                         // Navegar para a próxima tela ou atualizar a UI
