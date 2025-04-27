@@ -27,7 +27,7 @@ class AuthViewModel @Inject constructor(
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
-                    .setServerClientId("253613913863-i76s4mrirgclb8or61cre7q7mh45ksu5.apps.googleusercontent.com")
+                    .setServerClientId(context.getString(com.example.myoutfit.R.string.default_web_client_id))
                     .setFilterByAuthorizedAccounts(false)
                     .build())
             .setAutoSelectEnabled(true)
@@ -76,8 +76,10 @@ class AuthViewModel @Inject constructor(
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    Log.d("AuthViewModel", "Login com email e senha bem-sucedido.")
                     callback(true, null)
                 } else {
+                    Log.e("AuthViewModel", "Falha no login com email e senha", task.exception)
                     callback(false, task.exception?.localizedMessage)
                 }
             }

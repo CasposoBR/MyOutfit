@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,6 +40,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -47,7 +49,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -84,7 +85,10 @@ fun MyOutfitHomeScreen(navController: NavHostController) {
 
 @Composable
 fun BottomNavBar(selectedIndex: Int, onItemClick: (Int) -> Unit) {
-    NavigationBar {
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.primary, // Cor de fundo da barra de navegação
+        contentColor = MaterialTheme.colorScheme.onPrimary // Cor do texto/ícones
+    ) {
         BottomNavItem.entries.forEachIndexed { index, item ->
             NavigationBarItem(
                 icon = { Icon(imageVector = item.icon, contentDescription = item.label) },
@@ -144,6 +148,7 @@ fun SectionTitle(title: String) {
     Text(
         text = title,
         style = MaterialTheme.typography.titleLarge,
+        color = MaterialTheme.colorScheme.onSurface, // Cor primária para o título
         modifier = Modifier.padding(vertical = 8.dp)
     )
 }
@@ -188,7 +193,10 @@ fun ProductCard(
         modifier = Modifier
             .width(160.dp)
             .height(260.dp)
-            .clickable { onClick() }
+            .clickable { onClick() },
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp) // Usando a cor de fundo do tema com elevação
+        )
     ) {
         Box {
             Column(
@@ -211,6 +219,7 @@ fun ProductCard(
                     textAlign = TextAlign.Center,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onSurface, // Cor de texto do tema
                     modifier = Modifier
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                         .fillMaxWidth()
@@ -220,7 +229,7 @@ fun ProductCard(
                     text = product.price,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.primary, // Cor primária para o preço
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
@@ -234,7 +243,7 @@ fun ProductCard(
                 Icon(
                     imageVector = if (product.isFavorite) Icons.Filled.Star else Icons.Outlined.Star,
                     contentDescription = "Favoritar",
-                    tint = if (product.isFavorite) Color.Yellow else Color.Gray
+                    tint = if (product.isFavorite) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onSurface // Cor dinâmica
                 )
             }
         }

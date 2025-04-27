@@ -1,6 +1,7 @@
 package com.example.myoutfit.Screens
 
 import android.util.Patterns
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,11 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,6 +40,8 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController) {
     var cpf by remember { mutableStateOf("") }
     var dataNascimento by remember { mutableStateOf("") }
 
+    var emailError by remember { mutableStateOf(false) }
+    var passwordError by remember { mutableStateOf(false) }
     var cpfError by remember { mutableStateOf(false) }
     var dataError by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -79,7 +84,9 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController) {
     }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surfaceVariant), // Estilo de fundo similar ao do FavoritesScreen
         contentAlignment = Alignment.Center
     ) {
         Card(
@@ -87,7 +94,10 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController) {
                 .fillMaxWidth(0.9f)
                 .wrapContentHeight(),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-            shape = MaterialTheme.shapes.medium
+            shape = MaterialTheme.shapes.medium,
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            )
         ) {
             Column(
                 modifier = Modifier
@@ -96,20 +106,56 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController) {
             ) {
                 OutlinedTextField(
                     value = email,
-                    onValueChange = { email = it },
-                    label = { Text("Email") },
-                    modifier = Modifier.fillMaxWidth()
+                    onValueChange = {
+                        email = it
+                        emailError = it.isNotEmpty() && !Patterns.EMAIL_ADDRESS.matcher(it).matches()
+                    },
+                    label = { Text("Email", color = MaterialTheme.colorScheme.onSurface) },
+                    isError = emailError,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                        cursorColor = MaterialTheme.colorScheme.primary,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    )
                 )
+                if (emailError) {
+                    Text("Email inválido", color = MaterialTheme.colorScheme.error)
+                }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 OutlinedTextField(
                     value = password,
-                    onValueChange = { password = it },
-                    label = { Text("Senha") },
+                    onValueChange = {
+                        password = it
+                        passwordError = it.length < 6
+                    },
+                    label = { Text("Senha", color = MaterialTheme.colorScheme.onSurface) },
                     visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier.fillMaxWidth()
+                    isError = passwordError,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                        cursorColor = MaterialTheme.colorScheme.primary,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    )
                 )
+                if (passwordError && password.isNotEmpty()) {
+                    Text("Senha deve ter pelo menos 6 caracteres", color = MaterialTheme.colorScheme.error)
+                }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -119,11 +165,21 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController) {
                         cpf = it.filter { c -> c.isDigit() }.take(11)
                         cpfError = cpf.length == 11 && !isValidCPF(cpf)
                     },
-                    label = { Text("CPF") },
+                    label = { Text("CPF", color = MaterialTheme.colorScheme.onSurface) },
                     isError = cpfError,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                        cursorColor = MaterialTheme.colorScheme.primary,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    )
                 )
-
                 if (cpfError && cpf.length == 11) {
                     Text("CPF inválido", color = MaterialTheme.colorScheme.error)
                 }
@@ -136,11 +192,21 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController) {
                         dataNascimento = it.filter { c -> c.isDigit() }.take(8)
                         dataError = dataNascimento.length != 8
                     },
-                    label = { Text("Data de Nascimento (DD/MM/AAAA)") },
+                    label = { Text("Data de Nascimento (DD/MM/AAAA)", color = MaterialTheme.colorScheme.onSurface) },
                     isError = dataError,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                        cursorColor = MaterialTheme.colorScheme.primary,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    )
                 )
-
                 if (dataError && dataNascimento.isNotEmpty()) {
                     Text("Data inválida", color = MaterialTheme.colorScheme.error)
                 }
@@ -150,23 +216,8 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController) {
                 Button(
                     onClick = {
                         scope.launch {
-                            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                                errorMessage = "Email inválido"
-                                return@launch
-                            }
-
-                            if (password.length < 6) {
-                                errorMessage = "Senha deve ter pelo menos 6 caracteres"
-                                return@launch
-                            }
-
-                            if (!isValidCPF(cpf)) {
-                                errorMessage = "CPF inválido"
-                                return@launch
-                            }
-
-                            if (dataNascimento.length != 8) {
-                                errorMessage = "Data de nascimento incompleta"
+                            if (emailError || passwordError || cpfError || dataError) {
+                                errorMessage = "Por favor, corrija os erros antes de continuar"
                                 return@launch
                             }
 
@@ -178,7 +229,11 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController) {
                             }
                         }
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    )
                 ) {
                     Text("Cadastrar")
                 }
