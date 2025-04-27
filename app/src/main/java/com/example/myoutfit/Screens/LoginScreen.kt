@@ -163,9 +163,9 @@ fun LoginScreen(
                 // Botão de login com Google
                 TextButton(
                     onClick = {
-                        authViewModel.getGoogleSignInIntent { intentSender ->
-                            if (intentSender != null) {
-                                val intentSenderRequest = IntentSenderRequest.Builder(intentSender).build()
+                        authViewModel.getGoogleSignInIntent { pendingIntent ->
+                            if (pendingIntent != null) {
+                                val intentSenderRequest = IntentSenderRequest.Builder(pendingIntent.intentSender).build()
                                 launcher.launch(intentSenderRequest)
                             } else {
                                 Log.e("LoginScreen", "Falha ao obter o intent de login do Google")

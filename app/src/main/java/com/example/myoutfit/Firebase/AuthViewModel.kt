@@ -1,5 +1,6 @@
 package com.example.myoutfit.Firebase
 
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -34,10 +35,11 @@ class AuthViewModel @Inject constructor(
             .build()
     }
 
-    fun getGoogleSignInIntent(callback: (Intent?) -> Unit) {
+    fun getGoogleSignInIntent(callback: (PendingIntent?) -> Unit) {
         oneTapClient.beginSignIn(signInRequest)
             .addOnSuccessListener { result ->
-                callback(result.pendingIntent.intentSender.let { Intent(Intent.ACTION_VIEW).putExtra(Intent.EXTRA_INTENT, it) })
+                // Passa o PendingIntent diretamente para o callback
+                callback(result.pendingIntent)
             }
             .addOnFailureListener { e ->
                 Log.e("Auth", "Falha ao obter o intent de login do Google", e)

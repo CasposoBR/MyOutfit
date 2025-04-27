@@ -1,6 +1,5 @@
 package com.example.myoutfit
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -8,15 +7,14 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.fail
 import org.junit.Test
-import org.junit.Assert.*
-import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 import java.util.UUID
 
-@RunWith(AndroidJUnit4::class)
-class FirebaseAuthTest {
+class FirebaseAuthUnitTest {
 
     private val auth = FirebaseAuth.getInstance()
 
@@ -63,8 +61,7 @@ class FirebaseAuthTest {
         whenever(authResult.user).thenReturn(firebaseUser)
 
         // Simula a autenticação com o Firebase
-        val signInResult = mock(SignInResult::class.java)
-        whenever(auth.signInWithCredential(authCredential).await()).thenReturn(signInResult)
+        val signInResult = auth.signInWithCredential(authCredential).await()  // Aqui dentro da runBlocking
 
         // Verificar se o login foi bem-sucedido
         assertNotNull(signInResult.user)
@@ -72,7 +69,6 @@ class FirebaseAuthTest {
         println("Login com Google bem-sucedido.")
     }
 
-    // Função para gerar um e-mail único
     private fun generateUniqueEmail(): String {
         return "testuser-${UUID.randomUUID()}@example.com"
     }
