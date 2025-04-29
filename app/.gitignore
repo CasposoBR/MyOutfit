@@ -1,1 +1,4 @@
 /build
+app/google-services.json
+app/client_secret_*.json
+res/values/strings.xml

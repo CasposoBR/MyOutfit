@@ -3,6 +3,7 @@ package com.example.myoutfit.Firebase
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
+import com.example.myoutfit.R
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -29,7 +30,7 @@ class AuthViewModel @Inject constructor(
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
-                    .setServerClientId("975412249706-pdtvpfet91c4qnc9prvqr8si925biqne.apps.googleusercontent.com") // seu client ID
+                    .setServerClientId(context.getString(R.string.default_web_client_id)) // Usa o context injetado
                     .setFilterByAuthorizedAccounts(false)
                     .build()
             )
