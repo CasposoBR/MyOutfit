@@ -21,7 +21,6 @@ import com.example.myoutfit.Firebase.AuthViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class SignUpActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
     private val authViewModel: AuthViewModel by viewModels()
@@ -31,7 +30,7 @@ class SignUpActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         auth = FirebaseAuth.getInstance() // Inicializa FirebaseAuth
-        authViewModel.configureGoogleSignIn(this)
+        authViewModel.configureGoogleSignIn()  // Configure o Google SignIn
 
         googleSignInLauncher = registerForActivityResult(
             ActivityResultContracts.StartIntentSenderForResult()
@@ -41,15 +40,13 @@ class SignUpActivity : ComponentActivity() {
                 authViewModel.handleGoogleSignInResult(data) { success, message ->
                     if (success) {
                         Log.d("SignUpActivity", "Cadastro com Google bem-sucedido!")
-                        // Navegar para a próxima tela ou atualizar a UI
+                        navigateToHomeScreen()  // Navegar para a tela principal
                     } else {
                         Log.e("SignUpActivity", "Erro no cadastro com Google: $message")
-                        // Mostrar mensagem de erro para o usuário
                     }
                 }
             } else {
                 Log.e("SignUpActivity", "Cadastro com Google cancelado ou falhou")
-                // Mostrar mensagem de erro para o usuário
             }
         }
 
@@ -61,14 +58,19 @@ class SignUpActivity : ComponentActivity() {
     private fun signUpWithGoogle() {
         authViewModel.getGoogleSignInIntent { pendingIntent ->
             if (pendingIntent != null) {
-                // Utiliza o PendingIntent diretamente para criar o IntentSenderRequest
                 val intentSenderRequest = IntentSenderRequest.Builder(pendingIntent).build()
                 googleSignInLauncher.launch(intentSenderRequest)
             } else {
                 Log.e("SignUpActivity", "Falha ao obter o intent de login do Google")
-                // Mostrar mensagem de erro para o usuário
             }
         }
+    }
+
+    // Função para navegação para a tela principal após login
+    private fun navigateToHomeScreen() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()  // Evitar voltar para o cadastro
     }
 
     @Composable
@@ -153,13 +155,13 @@ class SignUpActivity : ComponentActivity() {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        println("Cadastro bem-sucedido!")
+                        Log.d("SignUpActivity", "Cadastro bem-sucedido!")
                     } else {
-                        println("Erro ao cadastrar, tente novamente.")
+                        Log.e("SignUpActivity", "Erro ao cadastrar, tente novamente.")
                     }
                 }
         } else {
-            println("Preencha todos os campos.")
+            Log.e("SignUpActivity", "Preencha todos os campos.")
         }
     }
 }

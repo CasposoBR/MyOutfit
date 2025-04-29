@@ -1,7 +1,7 @@
 package com.example.myoutfit.Activitys
 
+import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.IntentSenderRequest
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -20,8 +20,11 @@ import com.example.myoutfit.Database.TagTypeClothes
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun AppNavigation(navController: NavHostController, auth: FirebaseAuth, googleSignInLauncher: ActivityResultLauncher<IntentSenderRequest>) {
-    val auth = FirebaseAuth.getInstance()  // Inicialize o FirebaseAuth
+fun AppNavigation(
+    navController: NavHostController,
+    auth: FirebaseAuth,
+    googleSignInLauncher: ActivityResultLauncher<Intent>? = null // Passando o launcher para o componente
+) {
     val authViewModel: AuthViewModel = hiltViewModel()
 
     NavHost(navController = navController, startDestination = "login") {
@@ -29,15 +32,16 @@ fun AppNavigation(navController: NavHostController, auth: FirebaseAuth, googleSi
             LoginScreen(
                 auth = auth,
                 authViewModel = authViewModel,
-                launcher = googleSignInLauncher,
-                navController = navController
+                navController = navController,
+                googleSignInLauncher = googleSignInLauncher // Passando o launcher para a tela de login
             )
         }
 
         composable("register") {
             RegisterScreen(
                 auth = auth,
-                navController = navController
+                navController = navController,
+                googleSignInLauncher = googleSignInLauncher // Passando o launcher para a tela de registro
             )
         }
 
@@ -46,9 +50,9 @@ fun AppNavigation(navController: NavHostController, auth: FirebaseAuth, googleSi
         }
 
         composable("error") {
-            // Passando navController.popBackStack() como onBack
             ErrorScreen(onBack = { navController.popBackStack() })
         }
+
         composable("favorites") {
             FavoritesScreen(navController = navController)
         }
@@ -59,20 +63,18 @@ fun AppNavigation(navController: NavHostController, auth: FirebaseAuth, googleSi
         ) { backStackEntry ->
             val categoryName = backStackEntry.arguments?.getString("categoryName") ?: ""
             val categoryType = try {
-                TagTypeClothes.valueOf(categoryName.uppercase()) // Certifique-se de que o nome da categoria corresponde ao valor do Enum
+                TagTypeClothes.valueOf(categoryName.uppercase())
             } catch (e: IllegalArgumentException) {
                 null
             }
 
-            // Se categoryType for nulo, redireciona para a tela de erro
             if (categoryType == null) {
                 navController.navigate("error")
             } else {
-                // Passando corretamente o categoryType, viewModel e navController para CategoryScreen
                 CategoryScreen(
-                    categoryName = categoryType,  // Passando a categoria para a tela de categoria
-                    categoryViewModel = hiltViewModel(), // Passando o ViewModel
-                    navController = navController // Passando o navController para navegar
+                    categoryName = categoryType,
+                    categoryViewModel = hiltViewModel(),
+                    navController = navController
                 )
             }
         }

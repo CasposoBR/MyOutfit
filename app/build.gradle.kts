@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.myoutfit"
-        minSdk = 26
+        minSdk = 30
         targetSdk = 33 // Atualizado para 33, já que você está utilizando recursos do Android 13
         versionCode = 1
         versionName = "1.0"
@@ -76,6 +76,8 @@ dependencies {
 
     // Google Auth
     implementation(libs.play.services.auth)
+    implementation(libs.credentials)
+    implementation(libs.googleid)
 
     // Hilt
     implementation(libs.hilt.android)
@@ -88,6 +90,7 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.core.ktx)
     implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.mediation.test.suite)
     testImplementation(libs.testng)
     androidTestImplementation(libs.testng)
     androidTestImplementation(libs.core.testing)

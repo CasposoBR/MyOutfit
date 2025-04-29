@@ -1,6 +1,6 @@
 package com.example.myoutfit.Screens
 
-    import android.util.Log
+    import android.content.Intent
     import androidx.activity.result.ActivityResultLauncher
     import androidx.activity.result.IntentSenderRequest
     import androidx.compose.foundation.background
@@ -34,6 +34,7 @@ package com.example.myoutfit.Screens
     import androidx.compose.runtime.setValue
     import androidx.compose.ui.Alignment
     import androidx.compose.ui.Modifier
+    import androidx.compose.ui.platform.LocalContext
     import androidx.compose.ui.res.painterResource
     import androidx.compose.ui.text.input.PasswordVisualTransformation
     import androidx.compose.ui.unit.dp
@@ -49,13 +50,15 @@ package com.example.myoutfit.Screens
 fun LoginScreen(
     auth: FirebaseAuth,
     authViewModel: AuthViewModel,
-    launcher: ActivityResultLauncher<IntentSenderRequest>,
-    navController: NavHostController
+    navController: NavHostController,
+    googleSignInLauncher: ActivityResultLauncher<Intent>?
 ) {
+    LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val coroutineScope = rememberCoroutineScope()
+
 
     Box(
         modifier = Modifier
@@ -80,7 +83,7 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // Campo de email
+                // Campo de Email
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
@@ -99,7 +102,7 @@ fun LoginScreen(
                     )
                 )
 
-                // Campo de senha
+                // Campo de Senha
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
@@ -119,7 +122,7 @@ fun LoginScreen(
                     )
                 )
 
-                // Botão de login
+                // Botão de Login
                 Button(
                     onClick = {
                         coroutineScope.launch {
@@ -146,7 +149,7 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Botão de navegação para o cadastro
+                // Botão para ir ao Cadastro
                 TextButton(
                     onClick = {
                         navController.navigate("register")
@@ -160,17 +163,11 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Botão de login com Google
+                // Botão de Login com Google
                 TextButton(
                     onClick = {
-                        authViewModel.getGoogleSignInIntent { pendingIntent ->
-                            if (pendingIntent != null) {
-                                val intentSenderRequest = IntentSenderRequest.Builder(pendingIntent.intentSender).build()
-                                launcher.launch(intentSenderRequest)
-                            } else {
-                                Log.e("LoginScreen", "Falha ao obter o intent de login do Google")
-                            }
-                        }
+                        val signInIntent = authViewModel.configureGoogleSignIn()
+                   authViewModel.configureGoogleSignIn()
                     },
                     modifier = Modifier
                         .fillMaxWidth(0.8f)
@@ -195,8 +192,7 @@ fun LoginScreen(
                         Text("Entrar com o Google")
                     }
                 }
-
-                // Exibe mensagem de erro se houver
+                // Mensagem de Erro
                 errorMessage?.let {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(text = it, color = MaterialTheme.colorScheme.error)

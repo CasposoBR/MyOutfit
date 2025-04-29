@@ -1,6 +1,8 @@
 package com.example.myoutfit.Screens
 
+import android.content.Intent
 import android.util.Patterns
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +36,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @Composable
-fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController) {
+fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController, googleSignInLauncher: ActivityResultLauncher<Intent>?) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var cpf by remember { mutableStateOf("") }
@@ -160,10 +162,11 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 OutlinedTextField(
-                    value = formatCPF(cpf),
+                    value = cpf,
                     onValueChange = {
-                        cpf = it.filter { c -> c.isDigit() }.take(11)
-                        cpfError = cpf.length == 11 && !isValidCPF(cpf)
+                        val digits = it.filter { c -> c.isDigit() }.take(11)
+                        cpf = formatCPF(digits)
+                        cpfError = digits.length == 11 && !isValidCPF(digits)
                     },
                     label = { Text("CPF", color = MaterialTheme.colorScheme.onSurface) },
                     isError = cpfError,
@@ -187,11 +190,13 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 OutlinedTextField(
-                    value = formatDate(dataNascimento),
+                    value = dataNascimento,
                     onValueChange = {
-                        dataNascimento = it.filter { c -> c.isDigit() }.take(8)
-                        dataError = dataNascimento.length != 8
+                        val digits = it.filter { c -> c.isDigit() }.take(8)
+                        dataNascimento = formatDate(digits)
+                        dataError = digits.length != 8
                     },
+
                     label = { Text("Data de Nascimento (DD/MM/AAAA)", color = MaterialTheme.colorScheme.onSurface) },
                     isError = dataError,
                     modifier = Modifier.fillMaxWidth(),
@@ -207,6 +212,7 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController) {
                         unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                     )
                 )
+
                 if (dataError && dataNascimento.isNotEmpty()) {
                     Text("Data inválida", color = MaterialTheme.colorScheme.error)
                 }
@@ -229,6 +235,7 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController) {
                             }
                         }
                     },
+
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary,

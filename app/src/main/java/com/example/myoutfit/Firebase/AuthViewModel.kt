@@ -1,88 +1,70 @@
 package com.example.myoutfit.Firebase
 
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val firebaseAuth: FirebaseAuth
+    private val auth: FirebaseAuth,
+    private val googleSignInClient: GoogleSignInClient,
+    private val oneTapClient: SignInClient,  // Deve ser SignInClient, não OneTapSignInClient
+
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
-    private lateinit var oneTapClient: SignInClient
-    private lateinit var signInRequest: BeginSignInRequest
+    private var signInRequest: BeginSignInRequest? = null
 
-    fun configureGoogleSignIn(context: Context) {
-        oneTapClient = Identity.getSignInClient(context)
+    fun configureGoogleSignIn() {
         signInRequest = BeginSignInRequest.builder()
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
-                    .setServerClientId(context.getString(com.example.myoutfit.R.string.default_web_client_id))
+                    .setServerClientId("253613913863-i76s4mrirgclb8or61cre7q7mh45ksu5.apps.googleusercontent.com") // seu client ID
                     .setFilterByAuthorizedAccounts(false)
-                    .build())
-            .setAutoSelectEnabled(true)
+                    .build()
+            )
             .build()
     }
 
-    fun getGoogleSignInIntent(callback: (PendingIntent?) -> Unit) {
-        oneTapClient.beginSignIn(signInRequest)
+    fun getGoogleSignInIntent(callback: (pendingIntent: android.app.PendingIntent?) -> Unit) {
+        oneTapClient.beginSignIn(signInRequest!!) // Use SignInClient aqui
             .addOnSuccessListener { result ->
-                // Passa o PendingIntent diretamente para o callback
                 callback(result.pendingIntent)
             }
             .addOnFailureListener { e ->
-                Log.e("Auth", "Falha ao obter o intent de login do Google", e)
+                Log.e("AuthViewModel", "Erro ao iniciar o SignIn: ${e.localizedMessage}")
                 callback(null)
             }
     }
 
-    fun handleGoogleSignInResult(data: Intent?, callback: (Boolean, String?) -> Unit) {
-        if (data == null) {
-            callback(false, "Intent de login do Google é nulo")
-            return
-        }
-        try {
-            val result = oneTapClient.getSignInCredentialFromIntent(data)
-            val idToken = result.googleIdToken
-            if (!idToken.isNullOrEmpty()) {
-                val credential = GoogleAuthProvider.getCredential(idToken, null)
-                firebaseAuth.signInWithCredential(credential)
-                    .addOnCompleteListener { task ->
-                        callback(task.isSuccessful, task.exception?.localizedMessage)
-                    }
-            } else {
-                callback(false, "Token inválido")
-            }
-        } catch (e: ApiException) {
-            Log.e("Auth", "Falha no login do Google", e)
-            callback(false, e.localizedMessage)
-        }
+    fun getGoogleSignInIntentForLogin(): Intent {
+        return googleSignInClient.signInIntent
     }
 
-    fun signInWithEmailAndPassword(
-        email: String,
-        password: String,
-        callback: (Boolean, String?) -> Unit
+    fun handleGoogleSignInResult(
+        data: Intent?,
+        onResult: (Boolean, String?) -> Unit
     ) {
-        firebaseAuth.signInWithEmailAndPassword(email, password)
+        val credential = oneTapClient.getSignInCredentialFromIntent(data) // Novamente, use SignInClient aqui
+        val idToken = credential.googleIdToken
+        val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
+
+        auth.signInWithCredential(firebaseCredential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Log.d("AuthViewModel", "Login com email e senha bem-sucedido.")
-                    callback(true, null)
+                    onResult(true, null)
                 } else {
-                    Log.e("AuthViewModel", "Falha no login com email e senha", task.exception)
-                    callback(false, task.exception?.localizedMessage)
+                    onResult(false, task.exception?.localizedMessage)
                 }
             }
     }
