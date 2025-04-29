@@ -53,7 +53,7 @@ class AuthViewModel @Inject constructor(
             return
         }
         try {
-            val result = Identity.getSignInClient(data.extras?.get("android.intent.extra.INTENT") as Context).getSignInCredentialFromIntent(data)
+            val result = oneTapClient.getSignInCredentialFromIntent(data)
             val idToken = result.googleIdToken
             if (!idToken.isNullOrEmpty()) {
                 val credential = GoogleAuthProvider.getCredential(idToken, null)
