@@ -48,10 +48,10 @@
                 tags = listOf(StyleTag.FORMAL, StyleTag.OLDMONEY, StyleTag.ALL )
             ),
             ClothingItem(
-                name = "Tênis Branco Minimalista",
-                price = "R$ 150,00",
-                imageUrl = "https://i.imgur.com/KmWAlWi.jpg",
-                purchaseLink = "https://br.shein.com/Tenis-Branco-Minimalista-Masculino-p-87654321.html",
+                name = "Tênis New Sneaker Masculino",
+                price = "R$69,90",
+                imageUrl = "https://img.ltwebstatic.com/images3_spmp/2025/02/26/85/17405794869557570560ce170712fbc763f7213a05_thumbnail_220x293.webp",
+                purchaseLink = "br.shein.com/New-Sneaker-Men-s-And-Women-s-Casual-Sport-Urban-Shoes-p-58990273.html",
                 category = TagTypeClothes.SHOES,
                 tags = listOf(StyleTag.URBAN, StyleTag.CASUAL, StyleTag.ALL)
             ),
@@ -129,7 +129,7 @@
             ),
             ClothingItem(
                 imageUrl = "https://img.ltwebstatic.com/images3_spmp/2024/01/30/1b/1706556936ae19911a343e9b7ba6a9732a033a3107.webp",
-                name = "Calça Masculina Cargo Sarja Skatista",
+                name = "Calça Cargo Sarja Skatista",
                 purchaseLink = "https://br.shein.com/Men-Jeans-p-30021128.html",
                 category = TagTypeClothes.PANTS,
                 tags = listOf(StyleTag.TREND, StyleTag.URBAN, StyleTag.ALL),
@@ -166,8 +166,72 @@
                 category = TagTypeClothes.T_SHIRTS,
                 tags = listOf(StyleTag.URBAN, StyleTag.TREND, StyleTag.ALL),
                 price = "R$ 28,90"
+            ),
+            ClothingItem(
+                imageUrl = "https://img.ltwebstatic.com/images3_pi/2023/08/28/95/1693201542b5907e9293af79c8a904efcbc4d7e7c6_thumbnail_220x293.webp",
+                name = "Calças Largas Com Pernas Largas Plissadas",
+                purchaseLink = "br.shein.com/Manfinity-Hypemode-Loose-Fit-Men-s-Folded-Pleated-Wide-Leg-Pants-p-22142101.html",
+                category = TagTypeClothes.PANTS,
+                tags = listOf(StyleTag.FORMAL,StyleTag.OLDMONEY, StyleTag.ALL),
+                price = "R$ 89,99"
+            ),
+            ClothingItem(
+                imageUrl = "https://img.ltwebstatic.com/images3_pi/2024/08/05/c0/17228465857bfdc108566e9d4dfdaa08f0fc34738c_thumbnail_220x293.webp",
+                name = "Camisa Polo Básica Texturizada de Manga Curta",
+                purchaseLink = "br.shein.com/Manfinity-Homme-Men-s-Vacation-Casual-Style-With-An-INS-Inspired-Look-A-Geometric-Diamond-Textured-Jacquard-Knit-Short-Sleeve-Khaki-Polo-Shirt-With-A-Button-Placket-Perfect-For-Music-Festivals-And-Hawaiian-Beach-Vacations-As-Well-As-Everyday-Wear-An-Ideal-Gift-For-A-Boyfriend-Or-Husband-Offers-A-French-Elegance-And-Romance-Men-s-Apricot-Geometric-Stripe-Textured-Casual-Polo-Shirt-Polos-For-Men-Polo-Shirts-For-Men-Collar-p-39232859.html",
+                category = TagTypeClothes.T_SHIRTS,
+                tags = listOf(StyleTag.FORMAL, StyleTag.CLASSIC, StyleTag.OLDMONEY, StyleTag.ALL),
+                price = "R$ 99,96"
+            ),
+            ClothingItem(
+                imageUrl = "https://img.ltwebstatic.com/images3_spmp/2024/11/10/4f/17311986079990e255e82edad41d98571087a1d73c_thumbnail_220x293.webp",
+                name = "Camiseta Manga Longa Lisa Básica",
+                purchaseLink = "br.shein.com/Men-s-Basic-Plain-Long-Sleeve-T-Shirt-100-Cotton-30-1-Yarn-Combed-Round-Neck-Unisex-p-47997992.html",
+                category = TagTypeClothes.T_SHIRTS,
+                tags = listOf(StyleTag.WINTER, StyleTag.URBAN, StyleTag.CASUAL, StyleTag.ALL),
+                price = "R$ 37,99"
+            ),
+            ClothingItem(
+                name = "Camiseta Oversized Toji Fushiguro",
+                price = "R$49,99",
+                imageUrl = "https://img.ltwebstatic.com/images3_spmp/2024/03/28/b0/17115646364bde8b5134a73f1a3d7de84360b0a7ca_thumbnail_220x293.webp",
+                purchaseLink = "https://img.ltwebstatic.com/images3_spmp/2024/03/28/b0/17115646364bde8b5134a73f1a3d7de84360b0a7ca_thumbnail_220x293.webp",
+                category = TagTypeClothes.T_SHIRTS,
+                tags = listOf(StyleTag.CASUAL, StyleTag.SUMMER)
+            ),
+            ClothingItem(
+                name = "Camiseta Basica Algodao Katana Estilo Ukyoe",
+                price = "R$44,99",
+                imageUrl = "https://img.ltwebstatic.com/images3_spmp/2024/01/23/10/170594618347d2b281555ae6218ac64f2d4b1817f4_thumbnail_220x293.webp",
+                purchaseLink = "https://br.shein.com/Men-T-Shirts-p-29486595.html",
+                category = TagTypeClothes.T_SHIRTS,
+                tags = listOf(StyleTag.URBAN, StyleTag.TREND)
+            ),
+            ClothingItem(
+                name = "Kit 3 Bermudas em Linho Premium Shorts linho",
+                price = "R$107,70",
+                imageUrl = "https://img.ltwebstatic.com/images3_spmp/2024/03/10/d9/1710003849a385f06331459e0359660e6e31c0b97b_thumbnail_220x293.webp",
+                purchaseLink = "https://br.shein.com/Men-Denim-Shorts-p-31299715.html",
+                category = TagTypeClothes.SHORTS,
+                tags = listOf(StyleTag.SUMMER, StyleTag.CASUAL)
+            ),
+            ClothingItem(
+                name = "Kit com 3 Shorts Elástico Logo",
+                price = "R$85,41",
+                imageUrl = "https://img.ltwebstatic.com/images3_spmp/2025/01/18/7c/1737137063c86ec4b19b55b685b6782ce74084426a_thumbnail_220x293.webp",
+                purchaseLink = "https://br.shein.com/Kit-3-Elastic-Logo-Shorts-p-53727870.html",
+                category = TagTypeClothes.SHORTS,
+                tags = listOf(StyleTag.CASUAL, StyleTag.WORKOUT)
+            ),
+            ClothingItem(
+                name = "Camiseta Regata Algodão Blusa Over Machão",
+                price = "R$53,95",
+                imageUrl = "https://img.ltwebstatic.com/images3_spmp/2025/01/15/9a/1736890220ea01734e0596856581b2d0bb298f4add_thumbnail_220x293.webp",
+                purchaseLink = "https://br.shein.com/Men-s-Oversized-Cotton-Tank-Top-Oversized-Macho-Blouse-Cotton-Shirt-Streetwear-p-53859700.html",
+                category = TagTypeClothes.T_SHIRTS,
+                tags = listOf(StyleTag.URBAN, StyleTag.WORKOUT)
             )
+        )
 
             // Você pode adicionar quantos quiser aqui
-        )
     }
