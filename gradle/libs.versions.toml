@@ -14,6 +14,7 @@ activityCompose = "1.10.1"
 coreKtx = "1.15.0"
 
 appcompat = "1.7.0"
+material3Version = "1.2.1"
 mockitoAndroid = "5.17.0"
 mockitoCore = "4.x.x"
 mockitoKotlin = "4.x.x"
@@ -24,6 +25,7 @@ roomTesting = "2.7.1"
 runner = "1.6.2"
 truth = "1.1.3"
 ui = "1.7.8"
+uiTextGoogleFonts = "1.8.0"
 uiTooling = "1.7.8"
 toolingPreview = "1.5.0"
 foundationLayoutAndroid = "1.7.0"
@@ -105,6 +107,7 @@ lifecycle_runtime_ktx = { group = "androidx.lifecycle", name = "lifecycle-runtim
 lifecycle_viewmodel_compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 
 # Navigation
+material3-v121 = { module = "androidx.compose.material3:material3", version.ref = "material3Version" }
 mockito-android = { module = "org.mockito:mockito-android", version.ref = "mockitoAndroid" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
@@ -159,6 +162,7 @@ identity-credential-android = { group = "com.android.identity", name = "identity
 googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
 mediation-test-suite = { group = "com.google.android.ads", name = "mediation-test-suite", version.ref = "mediationTestSuite" }
 credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentialsPlayServicesAuth" }
+ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 [plugins]
 android_application = { id = "com.android.application", version.ref = "agp" }
 kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

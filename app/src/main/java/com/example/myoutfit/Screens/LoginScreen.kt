@@ -15,6 +15,7 @@ package com.example.myoutfit.Screens
     import androidx.compose.foundation.layout.height
     import androidx.compose.foundation.layout.padding
     import androidx.compose.foundation.layout.size
+    import androidx.compose.foundation.layout.width
     import androidx.compose.foundation.layout.wrapContentHeight
     import androidx.compose.foundation.layout.wrapContentWidth
     import androidx.compose.material3.Button
@@ -60,18 +61,22 @@ fun LoginScreen(
     val googleSignInLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
+
         if (result.resultCode == Activity.RESULT_OK) {
             val data: Intent? = result.data
             authViewModel.handleGoogleSignInResult(data) { success, message ->
                 if (success) {
+
                     onLoginSuccess() // 👈 chama o lambda para exibir anúncio
                     navController.navigate("home") {
                         popUpTo("login") { inclusive = true }
                     }
+
                 } else {
                     errorMessage = message
                 }
             }
+
         } else {
             errorMessage = "Falha no login com o Google"
         }
@@ -89,22 +94,25 @@ fun LoginScreen(
                 .wrapContentHeight(),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
             shape = MaterialTheme.shapes.medium,
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
-            )
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Campo de Email
+                Text(
+                    text = "Bem-vindo de volta!",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
-                    label = { Text("Email", color = MaterialTheme.colorScheme.onSurface) },
+                    label = { Text("Email") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.colors(
                         focusedTextColor = MaterialTheme.colorScheme.onSurface,
@@ -112,18 +120,15 @@ fun LoginScreen(
                         focusedContainerColor = MaterialTheme.colorScheme.surface,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                         focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                        unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                        cursorColor = MaterialTheme.colorScheme.primary,
-                        focusedLabelColor = MaterialTheme.colorScheme.primary,
-                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.outline,
+                        cursorColor = MaterialTheme.colorScheme.primary
                     )
                 )
 
-                // Campo de Senha
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    label = { Text("Senha", color = MaterialTheme.colorScheme.onSurface) },
+                    label = { Text("Senha") },
                     visualTransformation = PasswordVisualTransformation(),
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.colors(
@@ -132,22 +137,17 @@ fun LoginScreen(
                         focusedContainerColor = MaterialTheme.colorScheme.surface,
                         unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                         focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                        unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                        cursorColor = MaterialTheme.colorScheme.primary,
-                        focusedLabelColor = MaterialTheme.colorScheme.primary,
-                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.outline,
+                        cursorColor = MaterialTheme.colorScheme.primary
                     )
                 )
 
-                // Botão de Login
                 Button(
                     onClick = {
                         coroutineScope.launch {
                             try {
                                 authViewModel.auth.signInWithEmailAndPassword(email, password).await()
-
-                                onLoginSuccess() // 👈 chama o lambda para exibir anúncio
-
+                                onLoginSuccess()
                                 navController.navigate("home") {
                                     popUpTo("login") { inclusive = true }
                                 }
@@ -167,57 +167,45 @@ fun LoginScreen(
                     Text("INICIAR SESSÃO")
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Botão para ir ao Cadastro
                 TextButton(
-                    onClick = {
-                        navController.navigate("register")
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
+                    onClick = { navController.navigate("register") },
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Cadastre-se", color = MaterialTheme.colorScheme.secondary)
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Botão de Login com Google
-                TextButton(
+                Button(
                     onClick = {
                         val signInIntent = authViewModel.getGoogleSignInIntentForLogin()
                         googleSignInLauncher.launch(signInIntent)
                     },
                     modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                        .padding(8.dp),
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
                         contentColor = MaterialTheme.colorScheme.onSurface
                     )
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             painter = painterResource(id = R.drawable.logoicongoogle),
                             contentDescription = "Login com Google",
-                            modifier = Modifier.size(48.dp)
+                            modifier = Modifier.size(20.dp)
                         )
-                        Spacer(modifier = Modifier.size(8.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
                         Text("Entrar com o Google")
                     }
                 }
-            }
 
-            // Mensagem de Erro
-            errorMessage?.let {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = it, color = MaterialTheme.colorScheme.error)
+                // Mensagem de Erro
+                errorMessage?.let {
+                    Text(
+                        text = it,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
             }
         }
     }

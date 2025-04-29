@@ -105,6 +105,7 @@ dependencies {
     ksp(libs.room.compiler)            // 'room-compiler' para geração de implementações
 
     // Compose + Material3
+
     implementation(libs.coil.compose)
     implementation(libs.navigation.compose)
     implementation(platform(libs.compose.bom))
@@ -113,6 +114,7 @@ dependencies {
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.compose.ui)
     implementation(libs.material3)
+    implementation(libs.ui.text.google.fonts)
     implementation(libs.compose.ui.tooling.preview)
 
     //Coroutines

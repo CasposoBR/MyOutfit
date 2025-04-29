@@ -50,20 +50,25 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController, googleS
 
     val scope = rememberCoroutineScope()
 
-    fun formatCPF(input: String): String {
-        val digits = input.filter { it.isDigit() }.take(11)
-        return buildString {
-            for (i in digits.indices) {
-                append(digits[i])
-                if (i == 2 || i == 5) append('.')
-                if (i == 8) append('-')
-            }
+    // Função para formatar o CPF no padrão brasileiro (XXX.XXX.XXX-XX)
+    fun formatCPF(cpf: String): String {
+        // Remove tudo que não for número
+        val clean = cpf.filter { it.isDigit() }
+        if (clean.length == 11) {
+            return clean.chunked(3).joinToString(".").take(7) + "-" + clean.takeLast(2)
         }
+        return cpf // Se não for um CPF válido, retorna como está
     }
 
     fun isValidCPF(cpf: String): Boolean {
+
+        // Remover tudo que não seja número
         val clean = cpf.filter { it.isDigit() }
+
+        // Garantir que o CPF tem 11 números
         if (clean.length != 11 || clean.all { it == clean[0] }) return false
+
+        // Calcular os dois dígitos verificadores
         val digits = clean.map { it.toString().toInt() }
 
         val v1 = (0..8).sumOf { (10 - it) * digits[it] } % 11

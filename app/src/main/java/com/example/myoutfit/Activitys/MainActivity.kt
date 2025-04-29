@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
+import com.example.myoutfit.ui.theme.MyOutfitTheme
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
@@ -33,10 +34,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
-            AppNavigation(
-                navController = navController,
-                onLoginSuccess = { showAdIfAvailable() }
-            )
+            MyOutfitTheme {  // Aplica o tema corretamente
+                AppNavigation(
+                    navController = navController,
+                    onLoginSuccess = { showAdIfAvailable() })
+            }
         }
     }
 
