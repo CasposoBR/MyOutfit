@@ -12,14 +12,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,51 +41,28 @@ import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+import java.time.temporal.ChronoUnit
+import java.util.Calendar
+import java.util.Locale
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController, googleSignInLauncher: ActivityResultLauncher<Intent>?) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var cpf by remember { mutableStateOf("") }
     var dataNascimento by remember { mutableStateOf("") }
 
     var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
-    var cpfError by remember { mutableStateOf(false) }
     var dataError by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+    var isLoading by remember { mutableStateOf(false) }  // Variável para controlar o progresso
 
     val scope = rememberCoroutineScope()
-
-    // Função para formatar o CPF no padrão brasileiro (XXX.XXX.XXX-XX)
-    fun formatCPF(cpf: String): String {
-        // Remove tudo que não for número
-        val clean = cpf.filter { it.isDigit() }
-        if (clean.length == 11) {
-            return clean.chunked(3).joinToString(".").take(7) + "-" + clean.takeLast(2)
-        }
-        return cpf // Se não for um CPF válido, retorna como está
-    }
-
-    fun isValidCPF(cpf: String): Boolean {
-
-        // Remover tudo que não seja número
-        val clean = cpf.filter { it.isDigit() }
-
-        // Garantir que o CPF tem 11 números
-        if (clean.length != 11 || clean.all { it == clean[0] }) return false
-
-        // Calcular os dois dígitos verificadores
-        val digits = clean.map { it.toString().toInt() }
-
-        val v1 = (0..8).sumOf { (10 - it) * digits[it] } % 11
-        val d1 = if (v1 < 2) 0 else 11 - v1
-        if (digits[9] != d1) return false
-
-        val v2 = (0..9).sumOf { (11 - it) * digits[it] } % 11
-        val d2 = if (v2 < 2) 0 else 11 - v2
-        return digits[10] == d2
-    }
 
     fun formatDate(input: String): String {
         val digits = input.filter { it.isDigit() }.take(8)
@@ -90,12 +74,56 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController, googleS
         }
     }
 
+    fun isValidBirthDate(dateStr: String): Boolean {
+        return try {
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            val birthDate = LocalDate.parse(dateStr, formatter)
+            val today = LocalDate.now()
+            val age = ChronoUnit.YEARS.between(birthDate, today)
+
+            !birthDate.isAfter(today) && age in 13..120
+        } catch (e: DateTimeParseException) {
+            false
+        }
+    }
+
+    // Função de validação de e-mail (permitindo apenas Gmail e Hotmail, exceto admin@teste.com)
+    fun isValidEmail(email: String): Boolean {
+        return when {
+            email == "admin@teste.com" -> true // Permite o e-mail admin@teste.com
+            Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                val domain = email.substringAfter("@")
+                domain == "gmail.com" || domain == "hotmail.com"
+            }
+            else -> false
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceVariant), // Estilo de fundo similar ao do FavoritesScreen
+            .background(MaterialTheme.colorScheme.surfaceVariant),
         contentAlignment = Alignment.Center
     ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            TopAppBar(
+                title = { Text("Cadastro") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar")
+                    }
+                }
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                contentAlignment = Alignment.Center
+            ) {
+
+            }
+        }
+
         Card(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
@@ -106,6 +134,7 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController, googleS
                 containerColor = MaterialTheme.colorScheme.surface
             )
         ) {
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -115,7 +144,7 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController, googleS
                     value = email,
                     onValueChange = {
                         email = it
-                        emailError = it.isNotEmpty() && !Patterns.EMAIL_ADDRESS.matcher(it).matches()
+                        emailError = !isValidEmail(it)  // Verifica o email com a nova função
                     },
                     label = { Text("Email", color = MaterialTheme.colorScheme.onSurface) },
                     isError = emailError,
@@ -133,7 +162,7 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController, googleS
                     )
                 )
                 if (emailError) {
-                    Text("Email inválido", color = MaterialTheme.colorScheme.error)
+                    Text("Email inválido (apenas Gmail e Hotmail são permitidos)", color = MaterialTheme.colorScheme.error)
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -167,41 +196,13 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController, googleS
                 Spacer(modifier = Modifier.height(8.dp))
 
                 OutlinedTextField(
-                    value = cpf,
-                    onValueChange = {
-                        val digits = it.filter { c -> c.isDigit() }.take(11)
-                        cpf = formatCPF(digits)
-                        cpfError = digits.length == 11 && !isValidCPF(digits)
-                    },
-                    label = { Text("CPF", color = MaterialTheme.colorScheme.onSurface) },
-                    isError = cpfError,
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = TextFieldDefaults.colors(
-                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                        unfocusedIndicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                        cursorColor = MaterialTheme.colorScheme.primary,
-                        focusedLabelColor = MaterialTheme.colorScheme.primary,
-                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                    )
-                )
-                if (cpfError && cpf.length == 11) {
-                    Text("CPF inválido", color = MaterialTheme.colorScheme.error)
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                OutlinedTextField(
                     value = dataNascimento,
                     onValueChange = {
                         val digits = it.filter { c -> c.isDigit() }.take(8)
-                        dataNascimento = formatDate(digits)
-                        dataError = digits.length != 8
+                        val formatted = formatDate(digits)
+                        dataNascimento = formatted
+                        dataError = !isValidBirthDate(formatted)
                     },
-
                     label = { Text("Data de Nascimento (DD/MM/AAAA)", color = MaterialTheme.colorScheme.onSurface) },
                     isError = dataError,
                     modifier = Modifier.fillMaxWidth(),
@@ -217,7 +218,6 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController, googleS
                         unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                     )
                 )
-
                 if (dataError && dataNascimento.isNotEmpty()) {
                     Text("Data inválida", color = MaterialTheme.colorScheme.error)
                 }
@@ -226,9 +226,40 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController, googleS
 
                 Button(
                     onClick = {
+                        if (isLoading) return@Button // Impede múltiplos cliques enquanto carrega
+                        isLoading = true
                         scope.launch {
-                            if (emailError || passwordError || cpfError || dataError) {
+                            if (emailError || passwordError) {
                                 errorMessage = "Por favor, corrija os erros antes de continuar"
+                                isLoading = false
+                                return@launch
+                            }
+
+                            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                            sdf.isLenient = false
+                            try {
+                                val birthDate = sdf.parse(dataNascimento)
+                                val today = Calendar.getInstance()
+                                val birthCal = Calendar.getInstance().apply { time = birthDate!! }
+
+                                var age = today.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR)
+                                if (today.get(Calendar.DAY_OF_YEAR) < birthCal.get(Calendar.DAY_OF_YEAR)) {
+                                    age -= 1
+                                }
+
+                                if (age < 15 || age > 120) {
+                                    dataError = true
+                                    errorMessage = "Idade deve estar entre 15 e 120 anos"
+                                    isLoading = false
+                                    return@launch
+                                }
+
+                                dataError = false // validação passou
+
+                            } catch (e: Exception) {
+                                dataError = true
+                                errorMessage = "Data de nascimento inválida"
+                                isLoading = false
                                 return@launch
                             }
 
@@ -238,16 +269,25 @@ fun RegisterScreen(auth: FirebaseAuth, navController: NavHostController, googleS
                             } catch (e: Exception) {
                                 errorMessage = "Erro ao cadastrar: ${e.message}"
                             }
+                            isLoading = false
                         }
                     },
-
                     modifier = Modifier.fillMaxWidth(),
+                    enabled = !isLoading,  // Desabilita o botão enquanto carrega
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
-                    Text("Cadastrar")
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .padding(4.dp),  // Aqui você pode ajustar a margem, caso necessário
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    } else {
+                        Text("Cadastrar")
+                    }
                 }
 
                 errorMessage?.let {
