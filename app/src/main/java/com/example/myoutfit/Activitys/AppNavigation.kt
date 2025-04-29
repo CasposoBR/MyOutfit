@@ -22,28 +22,25 @@ import com.google.firebase.auth.FirebaseAuth
 @Composable
 fun AppNavigation(
     navController: NavHostController,
-    auth: FirebaseAuth,
-    googleSignInLauncher: ActivityResultLauncher<Intent>? = null,
     onLoginSuccess: () -> Unit
 ) {
+    val googleSignInLauncher: ActivityResultLauncher<Intent>? = null
     val authViewModel: AuthViewModel = hiltViewModel()
 
     NavHost(navController = navController, startDestination = "login") {
         composable("login") {
             LoginScreen(
-                auth = auth,
                 authViewModel = authViewModel,
                 navController = navController,
                 onLoginSuccess = onLoginSuccess
-                // Passando o launcher para a tela de login
             )
         }
 
         composable("register") {
             RegisterScreen(
-                auth = auth,
+                auth = FirebaseAuth.getInstance(),
                 navController = navController,
-                googleSignInLauncher = googleSignInLauncher // Passando o launcher para a tela de registro
+                googleSignInLauncher = googleSignInLauncher
             )
         }
 

@@ -1,5 +1,9 @@
 package com.example.myoutfit.Screens
 
+    import android.app.Activity
+    import android.content.Intent
+    import androidx.activity.compose.rememberLauncherForActivityResult
+    import androidx.activity.result.contract.ActivityResultContracts
     import androidx.compose.foundation.background
     import androidx.compose.foundation.layout.Arrangement
     import androidx.compose.foundation.layout.Box
@@ -31,31 +35,47 @@ package com.example.myoutfit.Screens
     import androidx.compose.runtime.setValue
     import androidx.compose.ui.Alignment
     import androidx.compose.ui.Modifier
-    import androidx.compose.ui.platform.LocalContext
     import androidx.compose.ui.res.painterResource
     import androidx.compose.ui.text.input.PasswordVisualTransformation
     import androidx.compose.ui.unit.dp
     import androidx.navigation.NavHostController
     import com.example.myoutfit.Firebase.AuthViewModel
     import com.example.myoutfit.R
-    import com.google.firebase.auth.FirebaseAuth
     import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
     import kotlinx.coroutines.launch
     import kotlinx.coroutines.tasks.await
 
 @Composable
 fun LoginScreen(
-    auth: FirebaseAuth,
     authViewModel: AuthViewModel,
     navController: NavHostController,
     onLoginSuccess: () -> Unit
 ) {
-    LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val coroutineScope = rememberCoroutineScope()
 
+    // Registro do ActivityResultLauncher para o Google SignIn
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            authViewModel.handleGoogleSignInResult(data) { success, message ->
+                if (success) {
+                    onLoginSuccess() // 👈 chama o lambda para exibir anúncio
+                    navController.navigate("home") {
+                        popUpTo("login") { inclusive = true }
+                    }
+                } else {
+                    errorMessage = message
+                }
+            }
+        } else {
+            errorMessage = "Falha no login com o Google"
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -124,7 +144,7 @@ fun LoginScreen(
                     onClick = {
                         coroutineScope.launch {
                             try {
-                                auth.signInWithEmailAndPassword(email, password).await()
+                                authViewModel.auth.signInWithEmailAndPassword(email, password).await()
 
                                 onLoginSuccess() // 👈 chama o lambda para exibir anúncio
 
@@ -163,12 +183,11 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-
                 // Botão de Login com Google
                 TextButton(
                     onClick = {
-                        val signInIntent = authViewModel.configureGoogleSignIn()
-                        // Iniciar o processo de login com o Google diretamente
+                        val signInIntent = authViewModel.getGoogleSignInIntentForLogin()
+                        googleSignInLauncher.launch(signInIntent)
                     },
                     modifier = Modifier
                         .fillMaxWidth(0.8f)
@@ -195,12 +214,13 @@ fun LoginScreen(
                 }
             }
 
-                // Mensagem de Erro
-                errorMessage?.let {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = it, color = MaterialTheme.colorScheme.error)
-                }
+            // Mensagem de Erro
+            errorMessage?.let {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = it, color = MaterialTheme.colorScheme.error)
             }
         }
     }
+}
+
 

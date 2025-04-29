@@ -2,174 +2,73 @@ package com.example.myoutfit.Activitys
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.example.myoutfit.Firebase.AuthViewModel
+import com.example.myoutfit.Screens.RegisterScreen
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignUpActivity : ComponentActivity() {
-    private lateinit var auth: FirebaseAuth
+    private lateinit var googleSignInLauncher: ActivityResultLauncher<Intent>
     private val authViewModel: AuthViewModel by viewModels()
-    private lateinit var googleSignInLauncher: ActivityResultLauncher<IntentSenderRequest>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        auth = FirebaseAuth.getInstance() // Inicializa FirebaseAuth
-        authViewModel.configureGoogleSignIn() // Configure o Google SignIn
-        googleSignInLauncher = registerForActivityResult(
+        authViewModel.configureGoogleSignIn() // Configura a autenticação com o Google
 
-            ActivityResultContracts.StartIntentSenderForResult()
+        // Registro do launcher para resultado do Google Sign-In
+        googleSignInLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == RESULT_OK) {
                 val data: Intent? = result.data
                 authViewModel.handleGoogleSignInResult(data) { success, message ->
                     if (success) {
-                        Log.d("SignUpActivity", "Cadastro com Google bem-sucedido!")
-                        navigateToHomeScreen()  // Navegar para a tela principal
+                        navigateToHomeScreen()
                     } else {
-                        Log.e("SignUpActivity", "Erro no cadastro com Google: $message")
+                        showToast("Erro: $message")
                     }
                 }
             } else {
-                Log.e("SignUpActivity", "Cadastro com Google cancelado ou falhou")
+                showToast("Erro ao realizar o login com o Google.")
             }
         }
 
+        // Chama RegisterScreen com os parâmetros corretos
         setContent {
-            SignUpScreen(auth, ::signUpWithGoogle)
+            RegisterScreen(
+                auth = FirebaseAuth.getInstance(), // Passa a instância do FirebaseAuth
+                navController = rememberNavController(), // Passa o navController
+                googleSignInLauncher = googleSignInLauncher // Passa o launcher
+            )
         }
     }
 
+    // Função para iniciar o fluxo de login com o Google
     private fun signUpWithGoogle() {
-        authViewModel.getGoogleSignInIntent { pendingIntent ->
-            if (pendingIntent != null) {
-                val intentSenderRequest = IntentSenderRequest.Builder(pendingIntent).build()
-                googleSignInLauncher.launch(intentSenderRequest)
-            } else {
-                Log.e("SignUpActivity", "Falha ao obter o intent de login do Google")
-            }
-        }
+        val signInIntent = authViewModel.getGoogleSignInIntentForLogin()
+        googleSignInLauncher.launch(signInIntent)
     }
 
-    // Função para navegação para a tela principal após login
+    // Navegação para a tela principal após login bem-sucedido
     private fun navigateToHomeScreen() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-        finish()  // Evitar voltar para o cadastro
+        finish()  // Finaliza a atividade de cadastro para evitar que o usuário volte para ela
     }
 
-    @Composable
-    fun SignUpScreen(
-        auth: FirebaseAuth,
-        signUpWithGoogle: () -> Unit
-    ) {
-        var email by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
-        var cpf by remember { mutableStateOf("") }
-        var birthDate by remember { mutableStateOf("") }
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Email") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Senha") },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = cpf,
-                onValueChange = { cpf = it },
-                label = { Text("CPF") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = birthDate,
-                onValueChange = { birthDate = it },
-                label = { Text("Data de Nascimento") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = { registerWithEmail(auth, email, password, cpf, birthDate) },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Cadastrar")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = { signUpWithGoogle() },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Cadastrar com Google")
-            }
-        }
-    }
-
-    fun registerWithEmail(
-        auth: FirebaseAuth,
-        email: String,
-        password: String,
-        cpf: String,
-        birthDate: String
-    ) {
-        if (email.isNotEmpty() && password.isNotEmpty() && cpf.isNotEmpty() && birthDate.isNotEmpty()) {
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.d("SignUpActivity", "Cadastro bem-sucedido!")
-                    } else {
-                        Log.e("SignUpActivity", "Erro ao cadastrar, tente novamente.")
-                    }
-                }
-        } else {
-            Log.e("SignUpActivity", "Preencha todos os campos.")
-        }
+    // Função para exibir mensagens de erro com Toast
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
+
 

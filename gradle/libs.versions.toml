@@ -76,6 +76,7 @@ firebaseCrashlyticsBuildtools = "3.0.3"
 identityCredentialAndroid = "20231002"
 googleid = "1.1.1"
 mediationTestSuite = "3.0.0"
+credentialsPlayServicesAuth = "1.5.0"
 
 [libraries]
 # Compose / UI
@@ -157,6 +158,7 @@ firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "fireb
 identity-credential-android = { group = "com.android.identity", name = "identity-credential-android", version.ref = "identityCredentialAndroid" }
 googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
 mediation-test-suite = { group = "com.google.android.ads", name = "mediation-test-suite", version.ref = "mediationTestSuite" }
+credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentialsPlayServicesAuth" }
 [plugins]
 android_application = { id = "com.android.application", version.ref = "agp" }
 kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

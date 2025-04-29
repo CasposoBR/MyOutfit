@@ -35,7 +35,6 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             AppNavigation(
                 navController = navController,
-                auth = auth ,
                 onLoginSuccess = { showAdIfAvailable() }
             )
         }

@@ -91,6 +91,8 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.firebase.crashlytics.buildtools)
     implementation(libs.mediation.test.suite)
+    implementation(libs.firebase.auth)
+    implementation(libs.credentials.play.services.auth)
     testImplementation(libs.testng)
     androidTestImplementation(libs.testng)
     androidTestImplementation(libs.core.testing)
