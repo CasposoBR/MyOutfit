@@ -1,8 +1,5 @@
 package com.example.myoutfit.Screens
 
-    import android.content.Intent
-    import androidx.activity.result.ActivityResultLauncher
-    import androidx.activity.result.IntentSenderRequest
     import androidx.compose.foundation.background
     import androidx.compose.foundation.layout.Arrangement
     import androidx.compose.foundation.layout.Box
@@ -51,7 +48,7 @@ fun LoginScreen(
     auth: FirebaseAuth,
     authViewModel: AuthViewModel,
     navController: NavHostController,
-    googleSignInLauncher: ActivityResultLauncher<Intent>?
+    onLoginSuccess: () -> Unit
 ) {
     LocalContext.current
     var email by remember { mutableStateOf("") }
@@ -128,6 +125,9 @@ fun LoginScreen(
                         coroutineScope.launch {
                             try {
                                 auth.signInWithEmailAndPassword(email, password).await()
+
+                                onLoginSuccess() // 👈 chama o lambda para exibir anúncio
+
                                 navController.navigate("home") {
                                     popUpTo("login") { inclusive = true }
                                 }
@@ -163,11 +163,12 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+
                 // Botão de Login com Google
                 TextButton(
                     onClick = {
                         val signInIntent = authViewModel.configureGoogleSignIn()
-                   authViewModel.configureGoogleSignIn()
+                        // Iniciar o processo de login com o Google diretamente
                     },
                     modifier = Modifier
                         .fillMaxWidth(0.8f)
@@ -192,6 +193,8 @@ fun LoginScreen(
                         Text("Entrar com o Google")
                     }
                 }
+            }
+
                 // Mensagem de Erro
                 errorMessage?.let {
                     Spacer(modifier = Modifier.height(8.dp))
@@ -200,4 +203,4 @@ fun LoginScreen(
             }
         }
     }
-}
+

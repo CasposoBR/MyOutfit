@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
@@ -15,16 +16,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyOutfit"
         tools:targetApi="tiramisu">
+
+        <!-- Meta-data para inicialização do Google AdMob com o App ID -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8385242277547474~6482133936" /> <!-- Substitua pelo seu App ID do AdMob -->
+
         <activity
             android:name=".Activitys.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.MyOutfit">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+    </application>
 </manifest>

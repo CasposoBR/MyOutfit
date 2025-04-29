@@ -78,7 +78,7 @@ dependencies {
     implementation(libs.play.services.auth)
     implementation(libs.credentials)
     implementation(libs.googleid)
-
+    implementation (libs.play.services.ads)
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.foundation.layout.android)

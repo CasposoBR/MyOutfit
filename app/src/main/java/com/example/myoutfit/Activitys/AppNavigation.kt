@@ -23,7 +23,8 @@ import com.google.firebase.auth.FirebaseAuth
 fun AppNavigation(
     navController: NavHostController,
     auth: FirebaseAuth,
-    googleSignInLauncher: ActivityResultLauncher<Intent>? = null // Passando o launcher para o componente
+    googleSignInLauncher: ActivityResultLauncher<Intent>? = null,
+    onLoginSuccess: () -> Unit
 ) {
     val authViewModel: AuthViewModel = hiltViewModel()
 
@@ -33,7 +34,8 @@ fun AppNavigation(
                 auth = auth,
                 authViewModel = authViewModel,
                 navController = navController,
-                googleSignInLauncher = googleSignInLauncher // Passando o launcher para a tela de login
+                onLoginSuccess = onLoginSuccess
+                // Passando o launcher para a tela de login
             )
         }
 
