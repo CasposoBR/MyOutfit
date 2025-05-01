@@ -51,7 +51,7 @@
                 name = "Tênis New Sneaker Masculino",
                 price = "R$69,90",
                 imageUrl = "https://img.ltwebstatic.com/images3_spmp/2025/02/26/85/17405794869557570560ce170712fbc763f7213a05_thumbnail_220x293.webp",
-                purchaseLink = "br.shein.com/New-Sneaker-Men-s-And-Women-s-Casual-Sport-Urban-Shoes-p-58990273.html",
+                purchaseLink = "https://br.shein.com/New-Sneaker-Men-s-And-Women-s-Casual-Sport-Urban-Shoes-p-58990273.html",
                 category = TagTypeClothes.SHOES,
                 tags = listOf(StyleTag.URBAN, StyleTag.CASUAL, StyleTag.ALL)
             ),
@@ -170,7 +170,7 @@
             ClothingItem(
                 imageUrl = "https://img.ltwebstatic.com/images3_pi/2023/08/28/95/1693201542b5907e9293af79c8a904efcbc4d7e7c6_thumbnail_220x293.webp",
                 name = "Calças Largas Com Pernas Largas Plissadas",
-                purchaseLink = "br.shein.com/Manfinity-Hypemode-Loose-Fit-Men-s-Folded-Pleated-Wide-Leg-Pants-p-22142101.html",
+                purchaseLink = "https://br.shein.com/Manfinity-Hypemode-Loose-Fit-Men-s-Folded-Pleated-Wide-Leg-Pants-p-22142101.html",
                 category = TagTypeClothes.PANTS,
                 tags = listOf(StyleTag.FORMAL,StyleTag.OLDMONEY, StyleTag.ALL),
                 price = "R$ 89,99"
@@ -178,7 +178,7 @@
             ClothingItem(
                 imageUrl = "https://img.ltwebstatic.com/images3_pi/2024/08/05/c0/17228465857bfdc108566e9d4dfdaa08f0fc34738c_thumbnail_220x293.webp",
                 name = "Camisa Polo Básica Texturizada de Manga Curta",
-                purchaseLink = "br.shein.com/Manfinity-Homme-Men-s-Vacation-Casual-Style-With-An-INS-Inspired-Look-A-Geometric-Diamond-Textured-Jacquard-Knit-Short-Sleeve-Khaki-Polo-Shirt-With-A-Button-Placket-Perfect-For-Music-Festivals-And-Hawaiian-Beach-Vacations-As-Well-As-Everyday-Wear-An-Ideal-Gift-For-A-Boyfriend-Or-Husband-Offers-A-French-Elegance-And-Romance-Men-s-Apricot-Geometric-Stripe-Textured-Casual-Polo-Shirt-Polos-For-Men-Polo-Shirts-For-Men-Collar-p-39232859.html",
+                purchaseLink = "https://br.shein.com/Manfinity-Homme-Men-s-Vacation-Casual-Style-With-An-INS-Inspired-Look-A-Geometric-Diamond-Textured-Jacquard-Knit-Short-Sleeve-Khaki-Polo-Shirt-With-A-Button-Placket-Perfect-For-Music-Festivals-And-Hawaiian-Beach-Vacations-As-Well-As-Everyday-Wear-An-Ideal-Gift-For-A-Boyfriend-Or-Husband-Offers-A-French-Elegance-And-Romance-Men-s-Apricot-Geometric-Stripe-Textured-Casual-Polo-Shirt-Polos-For-Men-Polo-Shirts-For-Men-Collar-p-39232859.html",
                 category = TagTypeClothes.T_SHIRTS,
                 tags = listOf(StyleTag.FORMAL, StyleTag.CLASSIC, StyleTag.OLDMONEY, StyleTag.ALL),
                 price = "R$ 99,96"
@@ -186,7 +186,7 @@
             ClothingItem(
                 imageUrl = "https://img.ltwebstatic.com/images3_spmp/2024/11/10/4f/17311986079990e255e82edad41d98571087a1d73c_thumbnail_220x293.webp",
                 name = "Camiseta Manga Longa Lisa Básica",
-                purchaseLink = "br.shein.com/Men-s-Basic-Plain-Long-Sleeve-T-Shirt-100-Cotton-30-1-Yarn-Combed-Round-Neck-Unisex-p-47997992.html",
+                purchaseLink = "https://br.shein.com/Men-s-Basic-Plain-Long-Sleeve-T-Shirt-100-Cotton-30-1-Yarn-Combed-Round-Neck-Unisex-p-47997992.html",
                 category = TagTypeClothes.T_SHIRTS,
                 tags = listOf(StyleTag.WINTER, StyleTag.URBAN, StyleTag.CASUAL, StyleTag.ALL),
                 price = "R$ 37,99"
@@ -195,7 +195,7 @@
                 name = "Camiseta Oversized Toji Fushiguro",
                 price = "R$49,99",
                 imageUrl = "https://img.ltwebstatic.com/images3_spmp/2024/03/28/b0/17115646364bde8b5134a73f1a3d7de84360b0a7ca_thumbnail_220x293.webp",
-                purchaseLink = "https://img.ltwebstatic.com/images3_spmp/2024/03/28/b0/17115646364bde8b5134a73f1a3d7de84360b0a7ca_thumbnail_220x293.webp",
+                purchaseLink = "https://br.shein.com/Men-s-Oversized-T-Shirt-100-Premium-Cotton-Toji-Fushiguro-Streetwear-Shirt-p-45289684.html",
                 category = TagTypeClothes.T_SHIRTS,
                 tags = listOf(StyleTag.CASUAL, StyleTag.SUMMER)
             ),
